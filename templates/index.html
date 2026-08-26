@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>호칭운세</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_03">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <p class="eyebrow">Today's Bond · Summon</p>
+      <h1>호칭운세</h1>
+      <p class="sub">오늘 당신을 부를 이름이 소환진 너머에서 기다리고 있어요</p>
+    </header>
+
+    <section class="orb-wrap">
+      <div class="orb" id="orb">
+        <div class="ring ring1"></div>
+        <div class="ring ring2"></div>
+        <div class="core" id="core">✦</div>
+      </div>
+      <button class="pull-btn" id="pullBtn" {% if already_pulled %}disabled{% endif %}>
+        {% if already_pulled %}오늘의 인연은 이미 확인했어요{% else %}오늘의 인연 소환하기{% endif %}
+      </button>
+      <p class="pity" id="pityText">{{ pity_text }}</p>
+      {% if already_pulled %}
+      <button class="ghost-btn" id="reopenBtn">오늘의 인연 다시 보기</button>
+      {% endif %}
+    </section>
+
+    <section class="rates">
+      <h3>확률표</h3>
+      <div id="ratesList">
+        {% for e in entries %}
+        <div class="rate-row">
+          <span class="name">{{ e.term }} <small>({{ e.game }})</small></span>
+          <span class="pct tag-{{ e.tier }}">{{ e.tier }} · {{ e.weight }}%</span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="history">
+      <h3>최근 인연 기록</h3>
+      <div class="history-strip" id="historyStrip">
+        {% if history %}
+          {% for h in history %}
+          <span class="chip"><span class="dot dot-{{ h['tier'] }}"></span>{{ h['pull_date'][5:] }} · {{ h['term'] }}</span>
+          {% endfor %}
+        {% else %}
+          <span class="empty-msg">아직 기록이 없어요. 오늘의 인연을 소환해보세요.</span>
+        {% endif %}
+      </div>
+    </section>
+
+    <footer>
+      모든 대사와 운세 문구는 창작 콘텐츠이며, 실제 게임의 음성·이미지·대사를 사용하지 않습니다.<br>
+      기록은 서버에 저장되며, 이 브라우저(쿠키)로 접속할 때만 확인할 수 있어요.
+    </footer>
+  </div>
+
+  <!-- 소환 결과 모달: 로딩 → 제스처 → 카드 리빌 -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="닫기">✕</button>
+
+      <div class="modal-stage" id="stageLoading">
+        <div class="orb small spinning">
+          <div class="ring ring1"></div>
+          <div class="ring ring2"></div>
+          <div class="core">✦</div>
+        </div>
+        <p class="modal-hint">인연의 실을 끌어당기는 중...</p>
+      </div>
+
+      <div class="modal-stage" id="stageGesture" hidden>
+        <p class="gesture-icon" id="gestureIcon" style="cursor:pointer;"></p>
+        <p class="gesture-label" id="gestureLabel"></p>
+        <div class="gesture-track" id="gestureTrack" style="cursor:pointer;">
+          <div class="gesture-fill" id="gestureFill"></div>
+          <div class="gesture-handle" id="gestureHandle">→</div>
+        </div>
+        <p class="gesture-sub" id="gestureSub" style="cursor:pointer; text-decoration:underline;">핸들을 밀거나 터치하여 확인하세요</p>
+      </div>
+
+      <div class="modal-stage" id="stageResult" hidden>
+        <div class="card" id="modalCard">
+          <span class="rarity-badge" id="mRarityBadge"></span>
+          <h2 class="term" id="mTermText"></h2>
+          <p class="game" id="mGameText"></p>
+          <div class="divider"></div>
+          <p class="fortune" id="mFortuneText"></p>
+          <div class="details">
+            <span>행운의 색 <b id="mLuckyColor"></b></span>
+            <span>행운의 수 <b id="mLuckyNumber"></b></span>
+          </div>
+        </div>
+        <button class="pull-btn modal-confirm" id="modalConfirm">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.THEME_MAP = {{ theme_map | tojson }};
+    window.TODAY_RESULT = {{ today_result_json | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_03"></script>
+</body>
+</html>
