@@ -6,20 +6,22 @@
 <title>호칭운세</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_03">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_05">
 </head>
 <body>
   <div class="page">
     <header>
-      <p class="eyebrow">Today's Bond · Summon</p>
+      <p class="eyebrow">✨ Today's Bond · Summon ✨</p>
       <h1>호칭운세</h1>
       <p class="sub">오늘 당신을 부를 이름이 소환진 너머에서 기다리고 있어요</p>
     </header>
 
     <section class="orb-wrap">
       <div class="orb" id="orb">
+        <div class="orb-aura"></div>
         <div class="ring ring1"></div>
         <div class="ring ring2"></div>
+        <div class="ring ring3"></div>
         <div class="core" id="core">✦</div>
       </div>
       <button class="pull-btn" id="pullBtn" {% if already_pulled %}disabled{% endif %}>
@@ -32,7 +34,7 @@
     </section>
 
     <section class="rates">
-      <h3>확률표</h3>
+      <h3>소환 확률표</h3>
       <div id="ratesList">
         {% for e in entries %}
         <div class="rate-row">
@@ -69,6 +71,7 @@
 
       <div class="modal-stage" id="stageLoading">
         <div class="orb small spinning">
+          <div class="orb-aura"></div>
           <div class="ring ring1"></div>
           <div class="ring ring2"></div>
           <div class="core">✦</div>
@@ -77,17 +80,21 @@
       </div>
 
       <div class="modal-stage" id="stageGesture" hidden>
-        <p class="gesture-icon" id="gestureIcon" style="cursor:pointer;"></p>
+        <p class="gesture-icon" id="gestureIcon"></p>
         <p class="gesture-label" id="gestureLabel"></p>
-        <div class="gesture-track" id="gestureTrack" style="cursor:pointer;">
+        <div class="gesture-track" id="gestureTrack">
           <div class="gesture-fill" id="gestureFill"></div>
           <div class="gesture-handle" id="gestureHandle">→</div>
         </div>
-        <p class="gesture-sub" id="gestureSub" style="cursor:pointer; text-decoration:underline;">핸들을 밀거나 터치하여 확인하세요</p>
+        <p class="gesture-sub" id="gestureSub">핸들을 밀거나 터치하여 확인하세요</p>
       </div>
 
       <div class="modal-stage" id="stageResult" hidden>
         <div class="card" id="modalCard">
+          <div class="card-art-wrap" id="mCardArtWrap">
+            <img class="card-art" id="mCardArt" src="" alt="호칭 일러스트">
+            <div class="card-shine"></div>
+          </div>
           <span class="rarity-badge" id="mRarityBadge"></span>
           <h2 class="term" id="mTermText"></h2>
           <p class="game" id="mGameText"></p>
@@ -107,6 +114,6 @@
     window.THEME_MAP = {{ theme_map | tojson }};
     window.TODAY_RESULT = {{ today_result_json | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_03"></script>
+  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_05"></script>
 </body>
 </html>

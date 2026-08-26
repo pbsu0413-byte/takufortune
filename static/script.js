@@ -33,6 +33,7 @@
   const gestureSub = document.getElementById('gestureSub');
 
   const modalCard = document.getElementById('modalCard');
+  const mCardArt = document.getElementById('mCardArt');
   const mRarityBadge = document.getElementById('mRarityBadge');
   const mTermText = document.getElementById('mTermText');
   const mGameText = document.getElementById('mGameText');
@@ -77,17 +78,17 @@
 
   function spawnParticles() {
     if (REDUCED_MOTION) return;
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 24; i++) {
       const p = document.createElement('span');
       p.className = 'particle';
       const angle = Math.random() * Math.PI * 2;
-      const dist = 60 + Math.random() * 80;
+      const dist = 60 + Math.random() * 90;
       p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
       p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
       p.style.left = '50%';
-      p.style.top = '30%';
+      p.style.top = '35%';
       modalCard.appendChild(p);
-      setTimeout(() => p.remove(), 1100);
+      setTimeout(() => p.remove(), 1200);
     }
   }
 
@@ -99,6 +100,10 @@
     mFortuneText.textContent = data.text;
     mLuckyColor.textContent = data.color;
     mLuckyNumber.textContent = data.num;
+    if (mCardArt) {
+      mCardArt.src = '/static/images/' + (data.entry_id || 'sense') + '.svg';
+      mCardArt.alt = data.term;
+    }
     showStage(stageResult);
     modalCard.classList.remove('show');
     requestAnimationFrame(() => {
@@ -198,7 +203,6 @@
         }
       } catch (_) {}
 
-      // 단순 탭/클릭이거나 살짝 건드린 경우 자동으로 끝까지 완성
       const movedDist = Math.hypot(e.clientX - startX, e.clientY - startY);
       if (wasDragging && movedDist < 10) {
         setProgress(100, true);
@@ -221,7 +225,6 @@
       e.preventDefault();
     }
 
-    // 트랙이나 제스처 안내 텍스트 클릭 시에도 자동 완성 실행
     function onTapToUnlock() {
       if (done) return;
       setProgress(100, true);

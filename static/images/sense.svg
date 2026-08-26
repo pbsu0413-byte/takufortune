@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-sense" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f"/>
+      <stop offset="50%" stop-color="#0f3460"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <radialGradient id="halo-glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#7fd4ff" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#00a8ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#00a8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff275"/>
+      <stop offset="100%" stop-color="#ff8c00"/>
+    </linearGradient>
+    <filter id="glow-sense" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="400" height="300" rx="16" fill="url(#bg-sense)"/>
+  <circle cx="200" cy="130" r="90" fill="url(#halo-glow)"/>
+  
+  <!-- Classroom Window Grid & Starlight -->
+  <path d="M40,30 L360,30 M40,90 L360,90 M40,150 L360,150 M40,210 L360,210 M40,270 L360,270" stroke="#7fd4ff" stroke-width="0.5" stroke-opacity="0.15"/>
+  <path d="M100,20 L100,280 M200,20 L200,280 M300,20 L300,280" stroke="#7fd4ff" stroke-width="0.5" stroke-opacity="0.15"/>
+  
+  <!-- Sensei Halo (Angelic Blue Tech Halo) -->
+  <g filter="url(#glow-sense)">
+    <circle cx="200" cy="110" r="55" fill="none" stroke="#7fd4ff" stroke-width="2.5" stroke-dasharray="14 6"/>
+    <circle cx="200" cy="110" r="45" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+    <polygon points="200,50 206,62 194,62" fill="#7fd4ff"/>
+    <polygon points="200,170 206,158 194,158" fill="#7fd4ff"/>
+    <polygon points="140,110 152,104 152,116" fill="#7fd4ff"/>
+    <polygon points="260,110 248,104 248,116" fill="#7fd4ff"/>
+    <circle cx="200" cy="110" r="8" fill="#ffffff"/>
+  </g>
+  
+  <!-- Floating Origami Paper Cranes / Documents -->
+  <path d="M90,170 L120,150 L110,185 Z" fill="#7fd4ff" opacity="0.75" filter="url(#glow-sense)"/>
+  <path d="M120,150 L140,165 L110,185 Z" fill="#ffffff" opacity="0.9"/>
+  <path d="M290,160 L320,140 L310,175 Z" fill="#7fd4ff" opacity="0.75" filter="url(#glow-sense)"/>
+  <path d="M320,140 L335,155 L310,175 Z" fill="#ffffff" opacity="0.9"/>
+  
+  <!-- Pen & Chalk Aesthetic Symbol -->
+  <g transform="translate(185, 175) rotate(-35)">
+    <rect x="0" y="0" width="8" height="50" rx="3" fill="#ffffff" filter="url(#glow-sense)"/>
+    <polygon points="0,50 8,50 4,62" fill="#ff6f9c"/>
+    <rect x="0" y="5" width="8" height="4" fill="#7fd4ff"/>
+  </g>
+  
+  <!-- Shimmering Star Particles -->
+  <circle cx="70" cy="70" r="2.5" fill="#ffffff" filter="url(#glow-sense)"/>
+  <circle cx="330" cy="80" r="2" fill="#7fd4ff" filter="url(#glow-sense)"/>
+  <circle cx="160" cy="240" r="3" fill="#ffcf5c" filter="url(#glow-sense)"/>
+  <circle cx="250" cy="230" r="2" fill="#ffffff" filter="url(#glow-sense)"/>
+</svg>
