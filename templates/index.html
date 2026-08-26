@@ -6,7 +6,7 @@
 <title>호칭운세</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_05">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_10">
 </head>
 <body>
   <div class="page">
@@ -69,6 +69,7 @@
     <div class="modal-box">
       <button class="modal-close" id="modalClose" aria-label="닫기">✕</button>
 
+      <!-- 로딩 단계 -->
       <div class="modal-stage" id="stageLoading">
         <div class="orb small spinning">
           <div class="orb-aura"></div>
@@ -79,8 +80,12 @@
         <p class="modal-hint">인연의 실을 끌어당기는 중...</p>
       </div>
 
+      <!-- 제스처 단계: 이모티콘 대신 테마 이미지 -->
       <div class="modal-stage" id="stageGesture" hidden>
-        <p class="gesture-icon" id="gestureIcon"></p>
+        <div class="gesture-art-frame" id="gestureArtFrame">
+          <img class="gesture-art-img" id="gestureArtImg" src="" alt="">
+          <span class="gesture-art-fallback" id="gestureArtFallback"></span>
+        </div>
         <p class="gesture-label" id="gestureLabel"></p>
         <div class="gesture-track" id="gestureTrack">
           <div class="gesture-fill" id="gestureFill"></div>
@@ -89,11 +94,12 @@
         <p class="gesture-sub" id="gestureSub">핸들을 밀거나 터치하여 확인하세요</p>
       </div>
 
+      <!-- 결과 단계: 카드 + 이미지 -->
       <div class="modal-stage" id="stageResult" hidden>
         <div class="card" id="modalCard">
           <div class="card-art-wrap" id="mCardArtWrap">
-            <img class="card-art" id="mCardArt" src="" alt="호칭 일러스트">
-            <div class="card-shine"></div>
+            <img class="card-art-img" id="mCardArt" src="" alt="">
+            <span class="card-art-fallback" id="mCardArtFallback"></span>
           </div>
           <span class="rarity-badge" id="mRarityBadge"></span>
           <h2 class="term" id="mTermText"></h2>
@@ -114,6 +120,6 @@
     window.THEME_MAP = {{ theme_map | tojson }};
     window.TODAY_RESULT = {{ today_result_json | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_05"></script>
+  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_10"></script>
 </body>
 </html>

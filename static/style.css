@@ -45,6 +45,7 @@ h1{
 }
 .sub{color:var(--muted);font-size:13.5px;margin:0;line-height:1.5;}
 
+/* ---- 메인 오브 ---- */
 .orb-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:34px;}
 .orb{
   position:relative;width:210px;height:210px;margin-bottom:24px;
@@ -59,13 +60,12 @@ h1{
   from{transform:scale(0.92);opacity:0.6;}
   to{transform:scale(1.08);opacity:1;}
 }
-.ring{position:absolute;border-radius:50%;inset:0;border:1.5px dashed rgba(148,163,184,0.3);}
-.ring1{border-color:rgba(56,189,248,0.5);border-style:dashed;}
-.ring2{inset:22px;border-color:rgba(244,63,94,0.45);border-style:solid;border-width:1px;}
-.ring3{inset:40px;border-color:rgba(251,191,36,0.4);border-style:dotted;border-width:2px;}
+.ring{position:absolute;border-radius:50%;inset:0;}
+.ring1{border:1.5px dashed rgba(56,189,248,0.5);}
+.ring2{inset:22px;border:1px solid rgba(244,63,94,0.45);}
+.ring3{inset:40px;border:2px dotted rgba(251,191,36,0.4);}
 .orb.spinning .ring1{animation:spin 1.2s linear infinite;}
 .orb.spinning .ring2{animation:spin 1.8s linear infinite reverse;}
-.orb.spinning .ring3{animation:spin 2.4s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
 .core{
@@ -75,10 +75,7 @@ h1{
   display:flex;align-items:center;justify-content:center;
   font-size:32px;color:var(--cyan);
   box-shadow:0 0 28px rgba(56,189,248,0.3) inset, 0 0 24px rgba(56,189,248,0.35);
-  transition:transform .4s ease, box-shadow .4s ease;
 }
-.orb.crack .core{transform:scale(1.18);box-shadow:0 0 50px rgba(251,191,36,0.85);}
-
 .pull-btn{
   font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:15px;
   background:linear-gradient(135deg, #f43f5e 0%, #c084fc 50%, #38bdf8 100%);
@@ -90,8 +87,7 @@ h1{
 }
 .pull-btn:hover:not(:disabled){
   transform:translateY(-2px) scale(1.02);
-  box-shadow:0 12px 34px rgba(244,63,94,0.55), 0 0 24px rgba(56,189,248,0.4);
-  background-position:right center;
+  box-shadow:0 12px 34px rgba(244,63,94,0.55);
 }
 .pull-btn:disabled{opacity:.55;cursor:default;transform:none;background:var(--panel-2);color:var(--muted);box-shadow:none;}
 .pity{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:12px;}
@@ -100,13 +96,13 @@ h1{
   font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:9px 22px;border-radius:999px;
   cursor:pointer;transition:all .2s ease;
 }
-.ghost-btn:hover{border-color:var(--cyan);background:rgba(56,189,248,0.12);box-shadow:0 0 16px rgba(56,189,248,0.25);}
+.ghost-btn:hover{border-color:var(--cyan);background:rgba(56,189,248,0.12);}
 
 /* ---- 모달 ---- */
 .modal-overlay[hidden]{display:none !important;}
 .modal-overlay{
   position:fixed;inset:0;z-index:100;
-  background:rgba(6,4,16,0.86);backdrop-filter:blur(8px);
+  background:rgba(6,4,16,0.88);backdrop-filter:blur(8px);
   display:flex;align-items:center;justify-content:center;
   padding:20px;
   animation:fadeIn .25s ease;
@@ -117,7 +113,7 @@ h1{
   background:linear-gradient(180deg, var(--panel), var(--panel-2));
   border:1px solid var(--line);border-radius:24px;
   padding:32px 24px 28px;
-  box-shadow:0 30px 90px rgba(0,0,0,0.65), 0 0 30px rgba(56,189,248,0.12);
+  box-shadow:0 30px 90px rgba(0,0,0,0.65), 0 0 30px rgba(56,189,248,0.1);
   display:flex;flex-direction:column;align-items:center;
   max-height:92vh;overflow-y:auto;
 }
@@ -129,30 +125,45 @@ h1{
   transition:all .15s ease;
 }
 .modal-close:hover{background:var(--rose);color:#fff;border-color:var(--rose);}
-
 .modal-stage[hidden]{display:none !important;}
 .modal-stage{width:100%;display:flex;flex-direction:column;align-items:center;}
 .modal-hint{margin-top:18px;color:var(--cyan);font-size:13px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
-.orb.small{width:120px;height:120px;margin-bottom:0;}
-.orb.small .core{width:56px;height:56px;font-size:20px;}
+.orb.small{width:110px;height:110px;margin-bottom:0;}
+.orb.small .core{width:50px;height:50px;font-size:18px;}
 
-/* ---- 제스처 ---- */
-.gesture-icon{font-size:48px;margin:0 0 8px;cursor:pointer;filter:drop-shadow(0 0 12px rgba(251,191,36,0.5));}
-.gesture-label{font-size:15px;text-align:center;margin:0 0 24px;color:var(--text);line-height:1.55;font-weight:500;}
+/* ---- 제스처 화면 이미지 ---- */
+.gesture-art-frame{
+  position:relative;width:100%;height:160px;border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg, var(--panel-2), var(--void));
+  border:1px solid var(--line);margin-bottom:14px;
+}
+.gesture-art-img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.gesture-art-fallback{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:52px;
+}
+.gesture-art-frame.no-art .gesture-art-img{display:none;}
+.gesture-art-frame.no-art .gesture-art-fallback{display:flex;}
+.gesture-art-frame:not(.no-art) .gesture-art-fallback{display:none;}
+
+/* ---- 제스처 트랙 ---- */
+.gesture-label{font-size:14px;text-align:center;margin:0 0 18px;color:var(--text);line-height:1.55;font-weight:500;}
 .gesture-track{
   position:relative;width:100%;height:54px;border-radius:27px;
   background:var(--void);border:1.5px solid var(--line);
   overflow:hidden;touch-action:none;user-select:none;cursor:pointer;
   box-shadow:inset 0 2px 8px rgba(0,0,0,0.5);
 }
-.gesture-track.vertical{width:54px;height:220px;margin:0 auto;}
+.gesture-track.vertical{width:54px;height:200px;margin:0 auto;}
 .gesture-fill{
   position:absolute;left:0;top:0;height:100%;width:0%;
-  background:linear-gradient(90deg, rgba(56,189,248,0.4), rgba(244,63,94,0.45));
+  background:linear-gradient(90deg, rgba(56,189,248,0.5), rgba(244,63,94,0.5));
 }
 .gesture-track.vertical .gesture-fill{
   width:100%;height:0%;bottom:0;top:auto;
-  background:linear-gradient(0deg, rgba(56,189,248,0.4), rgba(244,63,94,0.45));
+  background:linear-gradient(0deg, rgba(56,189,248,0.5), rgba(244,63,94,0.5));
 }
 .gesture-handle{
   position:absolute;top:3px;left:3px;width:48px;height:48px;border-radius:50%;
@@ -160,95 +171,92 @@ h1{
   display:flex;align-items:center;justify-content:center;color:#0f0c24;font-weight:900;
   font-size:18px;cursor:grab;box-shadow:0 4px 16px rgba(244,63,94,0.5);
   user-select:none;touch-action:none;
+  animation:pulseHandle 2s ease-in-out infinite;
 }
 .gesture-handle:active{cursor:grabbing;}
 .gesture-track.vertical .gesture-handle{top:auto;bottom:3px;left:3px;}
-.gesture-sub{margin-top:14px;color:var(--muted);font-size:12px;cursor:pointer;transition:color .15s ease;}
+@keyframes pulseHandle{
+  0%,100%{box-shadow:0 4px 16px rgba(244,63,94,0.4);}
+  50%{box-shadow:0 4px 26px rgba(56,189,248,0.9);transform:scale(1.06);}
+}
+.gesture-sub{margin-top:12px;color:var(--muted);font-size:12px;cursor:pointer;transition:color .15s;}
 .gesture-sub:hover{color:var(--cyan);}
 
-@keyframes pulseHandle {
-  0%, 100% { box-shadow: 0 4px 16px rgba(244,63,94,0.4); transform: scale(1); }
-  50% { box-shadow: 0 4px 26px rgba(56,189,248,0.85); transform: scale(1.06); }
-}
-.gesture-handle {
-  animation: pulseHandle 2s ease-in-out infinite;
-}
-
-/* ---- 결과 카드 & 일러스트 비주얼 ---- */
+/* ---- 결과 카드 ---- */
 .card{
   position:relative;overflow:hidden;width:100%;
   background:linear-gradient(180deg, #181534, #121026);
   border:1.5px solid var(--line);border-radius:22px;
-  padding:20px 20px 24px;text-align:center;
+  padding:0 0 20px;text-align:center;
   opacity:0;transform:translateY(18px) scale(.96);
   transition:all .5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .card.show{opacity:1;transform:translateY(0) scale(1);}
 
-/* SSR 홀로그램 카드 광택 이펙트 */
-.card.tier-SSR{
-  border-color:rgba(251,191,36,0.8);
-  box-shadow:0 0 50px rgba(251,191,36,0.28), 0 0 20px rgba(244,63,94,0.2);
+/* 카드 이미지 영역 */
+.card-art-wrap{
+  position:relative;width:100%;height:200px;overflow:hidden;
+  border-radius:20px 20px 0 0;margin-bottom:16px;
+  background:linear-gradient(135deg, #1a1535, #0c0820);
 }
+.card-art-img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .4s ease;
+}
+.card:hover .card-art-img{transform:scale(1.04);}
+.card-art-fallback{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:64px;
+}
+.card-art-wrap.no-art .card-art-img{display:none;}
+.card-art-wrap.no-art .card-art-fallback{display:flex;}
+.card-art-wrap:not(.no-art) .card-art-fallback{display:none;}
+
+/* 등급별 카드 효과 */
+.card.tier-SSR{border-color:rgba(251,191,36,0.8);box-shadow:0 0 50px rgba(251,191,36,0.25), 0 0 20px rgba(244,63,94,0.2);}
 .card.tier-SSR::before{
   content:'';position:absolute;inset:-50%;
-  background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.18) 48%, rgba(251,191,36,0.3) 52%, transparent 60%);
-  animation:shimmerFoil 3.5s linear infinite;
-  pointer-events:none;
+  background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.16) 48%, rgba(251,191,36,0.28) 52%, transparent 60%);
+  animation:shimmerFoil 3.5s linear infinite;pointer-events:none;
 }
 @keyframes shimmerFoil{
   0%{transform:translateX(-100%) rotate(25deg);}
   100%{transform:translateX(100%) rotate(25deg);}
 }
+.card.tier-SR{border-color:rgba(56,189,248,0.7);box-shadow:0 0 40px rgba(56,189,248,0.2);}
+.card.tier-R{border-color:rgba(148,163,184,0.4);}
 
-/* SR 사이언 네온 이펙트 */
-.card.tier-SR{
-  border-color:rgba(56,189,248,0.7);
-  box-shadow:0 0 40px rgba(56,189,248,0.22);
+/* 카드 내용 패딩 */
+.card .rarity-badge,.card .term,.card .game,.card .divider,.card .fortune,.card .details{
+  padding-left:18px;padding-right:18px;
 }
-/* R 실버 림 */
-.card.tier-R{
-  border-color:rgba(148,163,184,0.45);
-}
-
-/* 일러스트 래퍼 */
-.card-art-wrap{
-  position:relative;width:100%;height:190px;border-radius:14px;
-  overflow:hidden;margin-bottom:16px;
-  background:#090817;border:1px solid rgba(255,255,255,0.08);
-}
-.card-art{
-  width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .4s ease;
-}
-.card:hover .card-art{transform:scale(1.04);}
-
 .rarity-badge{
   display:inline-block;font-family:'JetBrains Mono',monospace;font-weight:700;
   font-size:13px;letter-spacing:.16em;padding:4px 16px;border-radius:999px;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 .tier-SSR .rarity-badge{background:rgba(251,191,36,0.2);color:var(--aurum);border:1px solid rgba(251,191,36,0.5);}
 .tier-SR .rarity-badge{background:rgba(56,189,248,0.18);color:var(--cyan);border:1px solid rgba(56,189,248,0.5);}
 .tier-R .rarity-badge{background:rgba(148,163,184,0.15);color:var(--silver);border:1px solid rgba(148,163,184,0.35);}
 
-.term{font-family:'Black Han Sans',sans-serif;font-size:36px;margin:0 0 4px;letter-spacing:.02em;color:#fff;}
+.term{font-family:'Black Han Sans',sans-serif;font-size:34px;margin:0 0 4px;color:#fff;}
 .tier-SSR .term{text-shadow:0 0 20px rgba(251,191,36,0.6);}
 .tier-SR .term{text-shadow:0 0 16px rgba(56,189,248,0.5);}
-
-.game{color:var(--muted);font-size:13px;margin:0 0 16px;}
-.divider{height:1px;background:var(--line);margin:0 0 16px;}
-.fortune{font-size:14.5px;line-height:1.75;margin:0 0 18px;color:var(--text);word-break:keep-all;}
+.game{color:var(--muted);font-size:13px;margin:0 0 14px;}
+.divider{height:1px;background:var(--line);margin:0 18px 14px;}
+.fortune{font-size:14px;line-height:1.75;margin:0 0 16px;color:var(--text);word-break:keep-all;}
 .details{display:flex;justify-content:center;gap:20px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
-.details b{color:var(--cyan);font-weight:700;}
+.details b{color:var(--cyan);}
 .tier-SSR .details b{color:var(--aurum);}
 
+/* 파티클 */
 .particle{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--aurum);pointer-events:none;animation:pop 1.1s ease-out forwards;box-shadow:0 0 10px #fbbf24;}
 @keyframes pop{
   0%{opacity:1;transform:translate(0,0) scale(1.2);}
   100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2);}
 }
 
+/* ---- 확률표 & 기록 ---- */
 section.rates, section.history{
   background:var(--panel);border:1px solid var(--line);border-radius:18px;
   padding:20px 22px;margin-bottom:18px;
@@ -259,23 +267,18 @@ h3{font-size:13px;color:var(--muted);margin:0 0 14px;font-weight:700;letter-spac
 .rate-row .name{color:var(--text);}
 .rate-row .name small{color:var(--muted);margin-left:6px;}
 .rate-row .pct{font-family:'JetBrains Mono',monospace;font-weight:600;}
-.tag-SSR{color:var(--aurum);text-shadow:0 0 10px rgba(251,191,36,0.4);}
+.tag-SSR{color:var(--aurum);}
 .tag-SR{color:var(--cyan);}
 .tag-R{color:var(--silver);}
 
 .history-strip{display:flex;flex-wrap:wrap;gap:8px;}
 .chip{display:flex;align-items:center;gap:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:12px;color:var(--muted);}
-.chip .dot{width:7px;height:7px;border-radius:50%;}
+.dot{width:7px;height:7px;border-radius:50%;}
 .dot-SSR{background:var(--aurum);box-shadow:0 0 8px #fbbf24;}
 .dot-SR{background:var(--cyan);box-shadow:0 0 8px #38bdf8;}
 .dot-R{background:var(--silver);}
 .empty-msg{color:var(--muted);font-size:13px;}
 
-footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:34px;line-height:1.6;}
+.modal-confirm{margin-top:14px;}
 
-@media (prefers-reduced-motion: reduce){
-  .orb.spinning .ring1, .orb.spinning .ring2, .orb.spinning .ring3{animation:none;}
-  .card{transition:opacity .2s ease;}
-  .particle{animation:none;display:none;}
-  .card.tier-SSR::before{animation:none;}
-}
+footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:34px;line-height:1.6;}
