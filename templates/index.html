@@ -6,7 +6,7 @@
 <title>호칭운세</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_10">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_30">
 </head>
 <body>
   <div class="page">
@@ -16,21 +16,42 @@
       <p class="sub">오늘 당신을 부를 이름이 소환진 너머에서 기다리고 있어요</p>
     </header>
 
-    <section class="orb-wrap">
-      <div class="orb" id="orb">
-        <div class="orb-aura"></div>
-        <div class="ring ring1"></div>
-        <div class="ring ring2"></div>
-        <div class="ring ring3"></div>
-        <div class="core" id="core">✦</div>
+    <!-- 메인 히어로 섹션 (뽑기 전: 오브 / 뽑은 후: 결과 카드) -->
+    <section class="main-hero">
+      <!-- 1) 아직 안 뽑았을 때: 소환 오브 -->
+      <div class="orb-wrap" id="orbWrap" {% if already_pulled %}hidden{% endif %}>
+        <div class="orb" id="orb">
+          <div class="orb-aura"></div>
+          <div class="ring ring1"></div>
+          <div class="ring ring2"></div>
+          <div class="ring ring3"></div>
+          <div class="core" id="core">✦</div>
+        </div>
+        <button class="pull-btn" id="pullBtn">오늘의 인연 소환하기</button>
+        <p class="pity" id="pityText">{{ pity_text }}</p>
       </div>
-      <button class="pull-btn" id="pullBtn" {% if already_pulled %}disabled{% endif %}>
-        {% if already_pulled %}오늘의 인연은 이미 확인했어요{% else %}오늘의 인연 소환하기{% endif %}
-      </button>
-      <p class="pity" id="pityText">{{ pity_text }}</p>
-      {% if already_pulled %}
-      <button class="ghost-btn" id="reopenBtn">오늘의 인연 다시 보기</button>
-      {% endif %}
+
+      <!-- 2) 이미 뽑았을 때: 메인 화면에 상시 전시되는 결과 카드 -->
+      <div class="main-card-wrap" id="mainCardWrap" {% if not already_pulled %}hidden{% endif %}>
+        <div class="main-card-badge">✦ 오늘의 소환 결과 ✦</div>
+        <div class="card main-display-card tier-{{ today_result_json.tier if today_result_json else 'SSR' }}" id="mainDisplayCard">
+          <div class="card-art-wrap">
+            <img class="card-art-img" id="mainCardArt" src="/static/images/{{ today_result_json.entry_id if today_result_json else 'sense' }}.svg" alt="">
+          </div>
+          <span class="rarity-badge" id="mainRarityBadge">{{ today_result_json.tier if today_result_json else '' }}</span>
+          <h2 class="term" id="mainTermText">{{ today_result_json.term if today_result_json else '' }}</h2>
+          <p class="game" id="mainGameText">{{ today_result_json.game if today_result_json else '' }}</p>
+          <div class="divider"></div>
+          <p class="fortune" id="mainFortuneText">{{ today_result_json.text if today_result_json else '' }}</p>
+          <div class="details">
+            <span>행운의 색 <b id="mainLuckyColor">{{ today_result_json.color if today_result_json else '' }}</b></span>
+            <span>행운의 수 <b id="mainLuckyNumber">{{ today_result_json.num if today_result_json else '' }}</b></span>
+          </div>
+        </div>
+        <div class="main-card-actions">
+          <button class="ghost-btn" id="reopenBtn">🎬 소환 연출 다시 보기</button>
+        </div>
+      </div>
     </section>
 
     <section class="rates">
@@ -64,12 +85,19 @@
     </footer>
   </div>
 
-  <!-- 소환 결과 모달: 로딩 → 제스처 → 카드 리빌 -->
+  <!-- 소환 결과 모달 (3D 카드 플립 & 테마별 배경 VFX) -->
   <div class="modal-overlay" id="modalOverlay" hidden>
+    <!-- 테마별 배경 특수 이펙트 레이어 -->
+    <div class="theme-ambient-fx" id="themeAmbientFx">
+      <div class="ambient-beam"></div>
+      <div class="ambient-particles"></div>
+      <div class="ambient-burst" id="ambientBurst"></div>
+    </div>
+
     <div class="modal-box">
       <button class="modal-close" id="modalClose" aria-label="닫기">✕</button>
 
-      <!-- 로딩 단계 -->
+      <!-- 1단계: 로딩 -->
       <div class="modal-stage" id="stageLoading">
         <div class="orb small spinning">
           <div class="orb-aura"></div>
@@ -80,35 +108,102 @@
         <p class="modal-hint">인연의 실을 끌어당기는 중...</p>
       </div>
 
-      <!-- 제스처 단계: 이모티콘 대신 테마 이미지 -->
+      <!-- 2단계: 제스처 인터랙션 -->
       <div class="modal-stage" id="stageGesture" hidden>
         <div class="gesture-art-frame" id="gestureArtFrame">
           <img class="gesture-art-img" id="gestureArtImg" src="" alt="">
           <span class="gesture-art-fallback" id="gestureArtFallback"></span>
         </div>
         <p class="gesture-label" id="gestureLabel"></p>
-        <div class="gesture-track" id="gestureTrack">
-          <div class="gesture-fill" id="gestureFill"></div>
-          <div class="gesture-handle" id="gestureHandle">→</div>
+
+        <!-- A) 서명형: 캔버스 서명 -->
+        <div class="gesture-sign-wrap" id="gestureSignWrap" hidden>
+          <div class="sign-canvas-box">
+            <canvas id="gestureCanvas"></canvas>
+            <p class="sign-hint">서명을 그어주세요</p>
+          </div>
+          <div class="sign-actions">
+            <button class="sign-reset-btn" id="signResetBtn">↺ 다시 쓰기</button>
+            <button class="sign-submit-btn" id="signSubmitBtn" disabled>제출하기 ✓</button>
+          </div>
         </div>
-        <p class="gesture-sub" id="gestureSub">핸들을 밀거나 터치하여 확인하세요</p>
+
+        <!-- B) 꾹 누르기형: 원형 게이지 -->
+        <div class="gesture-hold-wrap" id="gestureHoldWrap" hidden>
+          <div class="hold-ring-outer">
+            <svg class="hold-ring-svg" viewBox="0 0 140 140">
+              <circle class="hold-ring-bg" cx="70" cy="70" r="58"/>
+              <circle class="hold-ring-fill" id="holdRingFill" cx="70" cy="70" r="58"/>
+            </svg>
+            <button class="hold-btn" id="holdBtn">
+              <span class="hold-btn-icon" id="holdBtnIcon">꾹</span>
+            </button>
+          </div>
+          <p class="hold-hint">버튼을 꾹 누르고 있으면 게이지가 채워져요</p>
+        </div>
+
+        <!-- C) 돌리기형: 다이얼 회전 -->
+        <div class="gesture-dial-wrap" id="gestureDialWrap" hidden>
+          <div class="dial-container" id="dialContainer">
+            <div class="dial-ring-outer">
+              <svg class="dial-svg" viewBox="0 0 160 160">
+                <circle class="dial-bg" cx="80" cy="80" r="68"/>
+                <circle class="dial-fill" id="dialFill" cx="80" cy="80" r="68"/>
+              </svg>
+            </div>
+            <div class="dial-body" id="dialBody">
+              <div class="dial-knob"></div>
+              <div class="dial-handle-dot" id="dialHandleDot"></div>
+            </div>
+          </div>
+          <p class="dial-hint">손잡이를 시계방향으로 돌려주세요</p>
+        </div>
+
+        <!-- D) 연타형: 빠르게 탭해서 채우기 -->
+        <div class="gesture-tap-wrap" id="gestureTapWrap" hidden>
+          <div class="tap-progress-track">
+            <div class="tap-progress-fill" id="tapFill"></div>
+            <span class="tap-progress-label" id="tapProgressLabel">0%</span>
+          </div>
+          <button class="tap-btn" id="tapBtn">터치!</button>
+          <p class="tap-hint" id="tapHint">빠르게 반복해서 탭해주세요</p>
+        </div>
+
+        <p class="gesture-sub" id="gestureSub"></p>
       </div>
 
-      <!-- 결과 단계: 카드 + 이미지 -->
+      <!-- 3단계: 3D 양면 카드 플립 & 리빌 -->
       <div class="modal-stage" id="stageResult" hidden>
-        <div class="card" id="modalCard">
-          <div class="card-art-wrap" id="mCardArtWrap">
-            <img class="card-art-img" id="mCardArt" src="" alt="">
-            <span class="card-art-fallback" id="mCardArtFallback"></span>
-          </div>
-          <span class="rarity-badge" id="mRarityBadge"></span>
-          <h2 class="term" id="mTermText"></h2>
-          <p class="game" id="mGameText"></p>
-          <div class="divider"></div>
-          <p class="fortune" id="mFortuneText"></p>
-          <div class="details">
-            <span>행운의 색 <b id="mLuckyColor"></b></span>
-            <span>행운의 수 <b id="mLuckyNumber"></b></span>
+        <div class="card-3d-viewport">
+          <div class="card-flipper" id="cardFlipper">
+            <!-- 1) 카드 뒷면 (소환 서류 봉투 / 타로 뒷면) -->
+            <div class="card-face card-back">
+              <div class="card-back-inner">
+                <div class="card-back-ornament">✦</div>
+                <div class="card-back-seal">
+                  <div class="seal-inner">TOP SECRET</div>
+                </div>
+                <p class="card-back-title">TODAY'S DESTINY</p>
+                <p class="card-back-sub">인연이 개봉됩니다...</p>
+              </div>
+            </div>
+
+            <!-- 2) 카드 앞면 (공개되는 실제 운세 결과 카드) -->
+            <div class="card-face card-front card" id="modalCard">
+              <div class="card-art-wrap" id="mCardArtWrap">
+                <img class="card-art-img" id="mCardArt" src="" alt="">
+                <span class="card-art-fallback" id="mCardArtFallback"></span>
+              </div>
+              <span class="rarity-badge" id="mRarityBadge"></span>
+              <h2 class="term" id="mTermText"></h2>
+              <p class="game" id="mGameText"></p>
+              <div class="divider"></div>
+              <p class="fortune" id="mFortuneText"></p>
+              <div class="details">
+                <span>행운의 색 <b id="mLuckyColor"></b></span>
+                <span>행운의 수 <b id="mLuckyNumber"></b></span>
+              </div>
+            </div>
           </div>
         </div>
         <button class="pull-btn modal-confirm" id="modalConfirm">확인</button>
@@ -120,6 +215,6 @@
     window.THEME_MAP = {{ theme_map | tojson }};
     window.TODAY_RESULT = {{ today_result_json | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_10"></script>
+  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_30"></script>
 </body>
 </html>
