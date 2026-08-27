@@ -84,6 +84,7 @@
   const mLuckyNumber     = document.getElementById('mLuckyNumber');
   const modalConfirm     = document.getElementById('modalConfirm');
 
+  let currentResult = TODAY_RESULT || null;
   let pendingData = null;
   let isPulling   = false;
   let currentCleanup = null;
@@ -672,6 +673,7 @@
   }
 
   function applyToMainPage(data) {
+    currentResult = data;
     if (orbWrap) orbWrap.hidden = true;
     if (mainCardWrap) {
       mainCardWrap.hidden = false;
@@ -714,6 +716,7 @@
       ]);
       if (!res.ok) throw new Error('요청 실패');
       const data = await res.json();
+      currentResult = data;
       pendingData = data;
       isPulling = false;
       startGesture(data);
@@ -733,8 +736,12 @@
 
   if (reopenBtn) {
     reopenBtn.addEventListener('click', () => {
-      const targetData = pendingData || TODAY_RESULT;
-      if (targetData) openReopen(targetData);
+      const targetData = currentResult || pendingData || TODAY_RESULT;
+      if (targetData) {
+        if (currentCleanup) { currentCleanup(); currentCleanup = null; }
+        openModal();
+        startGesture(targetData);
+      }
     });
   }
 

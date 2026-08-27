@@ -6,7 +6,7 @@
 <title>호칭운세</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260827_01">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260827_02">
 </head>
 <body>
   <div class="page">
@@ -306,6 +306,6 @@
     window.THEME_MAP = {{ theme_map | tojson }};
     window.TODAY_RESULT = {{ today_result_json | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='script.js') }}?v=20260827_01"></script>
+  <script src="{{ url_for('static', filename='script.js') }}?v=20260827_02"></script>
 </body>
 </html>
