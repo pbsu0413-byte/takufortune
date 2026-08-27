@@ -759,7 +759,7 @@
     if (frameEl) frameEl.classList.remove('no-art');
     imgEl.onload  = () => { if (frameEl) frameEl.classList.remove('no-art'); };
     imgEl.onerror = () => { if (frameEl) frameEl.classList.add('no-art'); };
-    imgEl.src = '/static/images/' + (artKey || 'sense') + '.svg';
+    imgEl.src = '/static/images/' + (artKey || 'sense');
   }
 
 

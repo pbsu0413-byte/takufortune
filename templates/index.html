@@ -51,7 +51,7 @@
         <div class="main-card-badge" id="mainCardOwnerBadge">✦ 오늘의 소환 결과 ✦</div>
         <div class="card main-display-card tier-{{ today_result_json.tier if today_result_json else 'SSR' }}" id="mainDisplayCard">
           <div class="card-art-wrap">
-            <img class="card-art-img" id="mainCardArt" src="/static/images/{{ today_result_json.entry_id if today_result_json else 'sense' }}.svg" alt="">
+            <img class="card-art-img" id="mainCardArt" src="/static/images/{{ today_result_json.entry_id if today_result_json else 'sense' }}" alt="">
           </div>
           <span class="rarity-badge" id="mainRarityBadge">{{ today_result_json.tier if today_result_json else '' }}</span>
           <h2 class="term" id="mainTermText">{{ today_result_json.term if today_result_json else '' }}</h2>

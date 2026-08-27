@@ -4,7 +4,7 @@ import secrets
 import uuid
 from datetime import date, timedelta
 
-from flask import Flask, g, jsonify, render_template, request
+from flask import Flask, g, jsonify, render_template, request, send_from_directory
 
 import gacha
 
@@ -242,6 +242,26 @@ def api_pull():
 
 
 init_db()
+
+
+# ---------- 스마트 이미지 서빙 라우트 (.png, .jpg, .webp, .svg 자동 감지) ----------
+@app.route("/static/images/<path:filename>")
+def custom_static_images(filename):
+    img_folder = os.path.join(app.root_path, "static", "images")
+    base_name = os.path.splitext(filename)[0]
+
+    # 1. 정확한 파일명이 존재하는 경우
+    if os.path.isfile(os.path.join(img_folder, filename)):
+        return send_from_directory(img_folder, filename)
+
+    # 2. 확장자가 다르더라도 (.png, .jpg, .jpeg, .webp, .svg) 자동 매칭
+    for ext in [".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif"]:
+        candidate = base_name + ext
+        if os.path.isfile(os.path.join(img_folder, candidate)):
+            return send_from_directory(img_folder, candidate)
+
+    return send_from_directory(img_folder, filename)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
