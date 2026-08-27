@@ -189,7 +189,7 @@
     mGameText.textContent    = data.game;
     const prof = getProfile();
     if (mFortuneGreeting) {
-      mFortuneGreeting.textContent = `📜 [ ${prof.name} (${prof.age}세) 님의 오늘의 인연 ]`;
+      mFortuneGreeting.textContent = `📜 [ ${prof.name} 님의 오늘의 인연 ]`;
     }
     if (cardBackOwnerText) {
       cardBackOwnerText.textContent = `${prof.name} 님의 인연이 개봉됩니다...`;
@@ -723,7 +723,7 @@
       mainGameText.textContent    = data.game;
       const prof = getProfile();
       if (mainFortuneGreeting) {
-        mainFortuneGreeting.textContent = `📜 [ ${prof.name} (${prof.age}세) 님의 오늘의 인연 ]`;
+        mainFortuneGreeting.textContent = `📜 [ ${prof.name} 님의 오늘의 인연 ]`;
       }
       if (mainCardOwnerBadge) {
         mainCardOwnerBadge.textContent = `✦ ${prof.name} 님의 소환 결과 ✦`;
