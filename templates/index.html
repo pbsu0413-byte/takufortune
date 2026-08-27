@@ -6,20 +6,35 @@
 <title>호칭운세</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260827_02">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260827_05">
 </head>
 <body>
   <div class="page">
     <header>
-      <p class="eyebrow">✨ Today's Bond · Summon ✨</p>
+      <p class="eyebrow">✨ Today's Bond · Destiny ✨</p>
       <h1>호칭운세</h1>
       <p class="sub">오늘 당신을 부를 이름이 소환진 너머에서 기다리고 있어요</p>
     </header>
 
-    <!-- 메인 히어로 섹션 (뽑기 전: 오브 / 뽑은 후: 결과 카드) -->
+    <!-- 메인 히어로 섹션 (뽑기 전: 오브 + 프로필 입력 / 뽑은 후: 결과 카드) -->
     <section class="main-hero">
-      <!-- 1) 아직 안 뽑았을 때: 소환 오브 -->
+      <!-- 1) 아직 안 뽑았을 때: 소환사 프로필 입력 + 소환 오브 -->
       <div class="orb-wrap" id="orbWrap" {% if already_pulled %}hidden{% endif %}>
+        <!-- 소환사 운세 정보 입력 폼 -->
+        <div class="profile-card">
+          <div class="profile-card-title">✦ 소환사 정보 입력 ✦</div>
+          <div class="profile-fields">
+            <div class="field-group">
+              <label for="userNameInput">소환사 닉네임</label>
+              <input type="text" id="userNameInput" placeholder="예: 샬레의 센세, 지휘관" maxlength="12" value="소환사">
+            </div>
+            <div class="field-group">
+              <label for="userAgeInput">나이 (만 나이)</label>
+              <input type="number" id="userAgeInput" placeholder="예: 24" min="1" max="120" value="20">
+            </div>
+          </div>
+        </div>
+
         <div class="orb" id="orb">
           <div class="orb-aura"></div>
           <div class="ring ring1"></div>
@@ -33,7 +48,7 @@
 
       <!-- 2) 이미 뽑았을 때: 메인 화면에 상시 전시되는 결과 카드 -->
       <div class="main-card-wrap" id="mainCardWrap" {% if not already_pulled %}hidden{% endif %}>
-        <div class="main-card-badge">✦ 오늘의 소환 결과 ✦</div>
+        <div class="main-card-badge" id="mainCardOwnerBadge">✦ 오늘의 소환 결과 ✦</div>
         <div class="card main-display-card tier-{{ today_result_json.tier if today_result_json else 'SSR' }}" id="mainDisplayCard">
           <div class="card-art-wrap">
             <img class="card-art-img" id="mainCardArt" src="/static/images/{{ today_result_json.entry_id if today_result_json else 'sense' }}.svg" alt="">
@@ -42,6 +57,7 @@
           <h2 class="term" id="mainTermText">{{ today_result_json.term if today_result_json else '' }}</h2>
           <p class="game" id="mainGameText">{{ today_result_json.game if today_result_json else '' }}</p>
           <div class="divider"></div>
+          <p class="fortune-owner-greeting" id="mainFortuneGreeting"></p>
           <p class="fortune" id="mainFortuneText">{{ today_result_json.text if today_result_json else '' }}</p>
           <div class="details">
             <span>행운의 색 <b id="mainLuckyColor">{{ today_result_json.color if today_result_json else '' }}</b></span>
@@ -87,7 +103,6 @@
 
   <!-- 소환 모달 -->
   <div class="modal-overlay" id="modalOverlay" hidden>
-    <!-- 테마별 배경 특수 이펙트 레이어 -->
     <div class="theme-ambient-fx" id="themeAmbientFx">
       <div class="ambient-beam"></div>
       <div class="ambient-burst" id="ambientBurst"></div>
@@ -118,7 +133,6 @@
         <div class="gadget-box gadget-arsenal" id="gadgetArsenal" hidden>
           <div class="mag-wrapper">
             <div class="mag-body">
-              <div class="mag-ribs"></div>
               <div class="mag-slot" id="magSlot">
                 <div class="bullet-row" data-idx="4"><span class="bullet-head"></span><span class="bullet-brass">5.56mm</span></div>
                 <div class="bullet-row" data-idx="3"><span class="bullet-head"></span><span class="bullet-brass">5.56mm</span></div>
@@ -145,7 +159,7 @@
                 <span class="schale-logo">SCHALE</span>
                 <span class="doc-code">DOC-2026-KR</span>
               </div>
-              <p class="doc-title">당번 학생 인연 서약서</p>
+              <p class="doc-title" id="schaleDocTitle">당번 학생 인연 서약서</p>
               <div class="sign-area">
                 <canvas id="schaleCanvas"></canvas>
                 <div class="sign-placeholder" id="signPlaceholder">여기에 서명을 남겨주세요</div>
@@ -165,7 +179,6 @@
           <div class="command-seal-plate">
             <svg class="seal-svg" viewBox="0 0 160 160">
               <circle class="seal-magic-circle" cx="80" cy="80" r="72"/>
-              <!-- 영주 3획 -->
               <path class="seal-stroke" id="sealStroke1" d="M80,25 C92,40 96,55 80,70 C64,55 68,40 80,25 Z"/>
               <path class="seal-stroke" id="sealStroke2" d="M68,60 C48,70 44,95 64,105 C74,95 78,75 68,60 Z"/>
               <path class="seal-stroke" id="sealStroke3" d="M92,60 C112,70 116,95 96,105 C86,95 82,75 92,60 Z"/>
@@ -275,7 +288,7 @@
                   <div class="seal-inner">TOP SECRET</div>
                 </div>
                 <p class="card-back-title">TODAY'S DESTINY</p>
-                <p class="card-back-sub">인연이 개봉됩니다...</p>
+                <p class="card-back-sub" id="cardBackOwnerText">소환사 님의 인연이 개봉됩니다...</p>
               </div>
             </div>
 
@@ -289,6 +302,7 @@
               <h2 class="term" id="mTermText"></h2>
               <p class="game" id="mGameText"></p>
               <div class="divider"></div>
+              <p class="fortune-owner-greeting" id="mFortuneGreeting"></p>
               <p class="fortune" id="mFortuneText"></p>
               <div class="details">
                 <span>행운의 색 <b id="mLuckyColor"></b></span>
@@ -306,6 +320,6 @@
     window.THEME_MAP = {{ theme_map | tojson }};
     window.TODAY_RESULT = {{ today_result_json | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='script.js') }}?v=20260827_02"></script>
+  <script src="{{ url_for('static', filename='script.js') }}?v=20260827_05"></script>
 </body>
 </html>

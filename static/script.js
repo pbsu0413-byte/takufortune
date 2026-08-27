@@ -85,6 +85,38 @@
   const modalConfirm     = document.getElementById('modalConfirm');
 
   let currentResult = TODAY_RESULT || null;
+
+  // ============================================================
+  // 소환사 프로필 (닉네임 & 나이) 관리
+  // ============================================================
+  const userNameInput  = document.getElementById('userNameInput');
+  const userAgeInput   = document.getElementById('userAgeInput');
+  const mainFortuneGreeting = document.getElementById('mainFortuneGreeting');
+  const mFortuneGreeting    = document.getElementById('mFortuneGreeting');
+  const mainCardOwnerBadge  = document.getElementById('mainCardOwnerBadge');
+  const cardBackOwnerText   = document.getElementById('cardBackOwnerText');
+
+  function getProfile() {
+    const name = (userNameInput && userNameInput.value.trim()) || localStorage.getItem('tf_name') || '소환사';
+    const age  = (userAgeInput && userAgeInput.value.trim()) || localStorage.getItem('tf_age') || '20';
+    return { name, age };
+  }
+
+  function saveProfile() {
+    if (userNameInput) localStorage.setItem('tf_name', userNameInput.value.trim() || '소환사');
+    if (userAgeInput)  localStorage.setItem('tf_age', userAgeInput.value.trim() || '20');
+  }
+
+  // 로컬스토리지에서 복원
+  if (userNameInput && localStorage.getItem('tf_name')) {
+    userNameInput.value = localStorage.getItem('tf_name');
+  }
+  if (userAgeInput && localStorage.getItem('tf_age')) {
+    userAgeInput.value = localStorage.getItem('tf_age');
+  }
+  if (userNameInput) userNameInput.addEventListener('input', saveProfile);
+  if (userAgeInput)  userAgeInput.addEventListener('input', saveProfile);
+
   let pendingData = null;
   let isPulling   = false;
   let currentCleanup = null;
@@ -155,6 +187,13 @@
     mRarityBadge.textContent = data.tier;
     mTermText.textContent    = data.term;
     mGameText.textContent    = data.game;
+    const prof = getProfile();
+    if (mFortuneGreeting) {
+      mFortuneGreeting.textContent = `📜 [ ${prof.name} (${prof.age}세) 님의 오늘의 인연 ]`;
+    }
+    if (cardBackOwnerText) {
+      cardBackOwnerText.textContent = `${prof.name} 님의 인연이 개봉됩니다...`;
+    }
     mFortuneText.textContent = data.text;
     mLuckyColor.textContent  = data.color;
     mLuckyNumber.textContent = data.num;
@@ -682,6 +721,13 @@
       mainRarityBadge.textContent = data.tier;
       mainTermText.textContent    = data.term;
       mainGameText.textContent    = data.game;
+      const prof = getProfile();
+      if (mainFortuneGreeting) {
+        mainFortuneGreeting.textContent = `📜 [ ${prof.name} (${prof.age}세) 님의 오늘의 인연 ]`;
+      }
+      if (mainCardOwnerBadge) {
+        mainCardOwnerBadge.textContent = `✦ ${prof.name} 님의 소환 결과 ✦`;
+      }
       mainFortuneText.textContent = data.text;
       mainLuckyColor.textContent  = data.color;
       mainLuckyNumber.textContent = data.num;

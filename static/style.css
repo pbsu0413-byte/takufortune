@@ -520,3 +520,32 @@ h3{font-size:13px;color:var(--muted);margin:0 0 14px;font-weight:700;letter-spac
 .dot-R{background:var(--silver);}
 .empty-msg{color:var(--muted);font-size:13px;}
 footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:34px;line-height:1.6;}
+
+/* ---- 소환사 프로필 입력 폼 ---- */
+.profile-card{
+  width:100%;max-width:380px;background:linear-gradient(180deg, rgba(28,24,62,0.85), rgba(18,14,42,0.92));
+  border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:20px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.35);backdrop-filter:blur(6px);
+}
+.profile-card-title{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;letter-spacing:1.5px;
+  color:var(--cyan);text-align:center;margin-bottom:12px;
+}
+.profile-fields{display:flex;gap:12px;}
+.field-group{flex:1;display:flex;flex-direction:column;gap:5px;}
+.field-group label{
+  font-size:11.5px;color:var(--muted);font-weight:500;
+}
+.field-group input{
+  background:rgba(10,7,24,0.8);border:1px solid var(--line);border-radius:10px;
+  padding:9px 12px;color:#fff;font-size:13px;font-family:'Noto Sans KR',sans-serif;
+  transition:all .2s;outline:none;
+}
+.field-group input:focus{
+  border-color:var(--cyan);box-shadow:0 0 12px rgba(56,189,248,0.3);background:rgba(15,11,35,0.95);
+}
+
+.fortune-owner-greeting{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);
+  margin:0 0 6px;font-weight:700;letter-spacing:0.5px;
+}
