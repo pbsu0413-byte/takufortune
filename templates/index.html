@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>호칭운세</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260826_30">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260827_01">
 </head>
 <body>
   <div class="page">
@@ -85,12 +85,11 @@
     </footer>
   </div>
 
-  <!-- 소환 결과 모달 (3D 카드 플립 & 테마별 배경 VFX) -->
+  <!-- 소환 모달 -->
   <div class="modal-overlay" id="modalOverlay" hidden>
     <!-- 테마별 배경 특수 이펙트 레이어 -->
     <div class="theme-ambient-fx" id="themeAmbientFx">
       <div class="ambient-beam"></div>
-      <div class="ambient-particles"></div>
       <div class="ambient-burst" id="ambientBurst"></div>
     </div>
 
@@ -108,68 +107,160 @@
         <p class="modal-hint">인연의 실을 끌어당기는 중...</p>
       </div>
 
-      <!-- 2단계: 제스처 인터랙션 -->
+      <!-- 2단계: 게임별 시그니처 소환 가젯 인터랙션 -->
       <div class="modal-stage" id="stageGesture" hidden>
-        <div class="gesture-art-frame" id="gestureArtFrame">
-          <img class="gesture-art-img" id="gestureArtImg" src="" alt="">
-          <span class="gesture-art-fallback" id="gestureArtFallback"></span>
-        </div>
-        <p class="gesture-label" id="gestureLabel"></p>
-
-        <!-- A) 서명형: 캔버스 서명 -->
-        <div class="gesture-sign-wrap" id="gestureSignWrap" hidden>
-          <div class="sign-canvas-box">
-            <canvas id="gestureCanvas"></canvas>
-            <p class="sign-hint">서명을 그어주세요</p>
-          </div>
-          <div class="sign-actions">
-            <button class="sign-reset-btn" id="signResetBtn">↺ 다시 쓰기</button>
-            <button class="sign-submit-btn" id="signSubmitBtn" disabled>제출하기 ✓</button>
-          </div>
+        <div class="gadget-header">
+          <span class="gadget-tag" id="gadgetTag">INTERACTION</span>
+          <p class="gadget-title" id="gadgetTitle"></p>
         </div>
 
-        <!-- B) 꾹 누르기형: 원형 게이지 -->
-        <div class="gesture-hold-wrap" id="gestureHoldWrap" hidden>
-          <div class="hold-ring-outer">
-            <svg class="hold-ring-svg" viewBox="0 0 140 140">
-              <circle class="hold-ring-bg" cx="70" cy="70" r="58"/>
-              <circle class="hold-ring-fill" id="holdRingFill" cx="70" cy="70" r="58"/>
-            </svg>
-            <button class="hold-btn" id="holdBtn">
-              <span class="hold-btn-icon" id="holdBtnIcon">꾹</span>
+        <!-- 1) 소녀전선: 밀리터리 5발 탄창 삽탄 장전 UI -->
+        <div class="gadget-box gadget-arsenal" id="gadgetArsenal" hidden>
+          <div class="mag-wrapper">
+            <div class="mag-body">
+              <div class="mag-ribs"></div>
+              <div class="mag-slot" id="magSlot">
+                <div class="bullet-row" data-idx="4"><span class="bullet-head"></span><span class="bullet-brass">5.56mm</span></div>
+                <div class="bullet-row" data-idx="3"><span class="bullet-head"></span><span class="bullet-brass">5.56mm</span></div>
+                <div class="bullet-row" data-idx="2"><span class="bullet-head"></span><span class="bullet-brass">5.56mm</span></div>
+                <div class="bullet-row" data-idx="1"><span class="bullet-head"></span><span class="bullet-brass">5.56mm</span></div>
+                <div class="bullet-row" data-idx="0"><span class="bullet-head"></span><span class="bullet-brass">5.56mm</span></div>
+              </div>
+              <div class="mag-base">STANAG 30-RD</div>
+            </div>
+            <button class="ammo-load-btn" id="ammoLoadBtn">
+              <span class="ammo-icon">⚡</span>
+              <span class="ammo-text">탄환 삽탄 (0/5)</span>
             </button>
           </div>
-          <p class="hold-hint">버튼을 꾹 누르고 있으면 게이지가 채워져요</p>
+          <p class="gadget-hint">버튼을 탭하여 탄창에 탄환 5발을 가득 장전하세요</p>
         </div>
 
-        <!-- C) 돌리기형: 다이얼 회전 -->
-        <div class="gesture-dial-wrap" id="gestureDialWrap" hidden>
-          <div class="dial-container" id="dialContainer">
-            <div class="dial-ring-outer">
-              <svg class="dial-svg" viewBox="0 0 160 160">
-                <circle class="dial-bg" cx="80" cy="80" r="68"/>
-                <circle class="dial-fill" id="dialFill" cx="80" cy="80" r="68"/>
-              </svg>
-            </div>
-            <div class="dial-body" id="dialBody">
-              <div class="dial-knob"></div>
-              <div class="dial-handle-dot" id="dialHandleDot"></div>
+        <!-- 2) 블루 아카이브: 샬레(SCHALE) 서약 서류 결재 UI -->
+        <div class="gadget-box gadget-school" id="gadgetSchool" hidden>
+          <div class="clipboard-box">
+            <div class="clipboard-clip"></div>
+            <div class="clipboard-paper">
+              <div class="schale-header">
+                <span class="schale-logo">SCHALE</span>
+                <span class="doc-code">DOC-2026-KR</span>
+              </div>
+              <p class="doc-title">당번 학생 인연 서약서</p>
+              <div class="sign-area">
+                <canvas id="schaleCanvas"></canvas>
+                <div class="sign-placeholder" id="signPlaceholder">여기에 서명을 남겨주세요</div>
+                <div class="approval-stamp" id="approvalStamp">承認<br><small>APPROVED</small></div>
+              </div>
             </div>
           </div>
-          <p class="dial-hint">손잡이를 시계방향으로 돌려주세요</p>
-        </div>
-
-        <!-- D) 연타형: 빠르게 탭해서 채우기 -->
-        <div class="gesture-tap-wrap" id="gestureTapWrap" hidden>
-          <div class="tap-progress-track">
-            <div class="tap-progress-fill" id="tapFill"></div>
-            <span class="tap-progress-label" id="tapProgressLabel">0%</span>
+          <div class="clipboard-actions">
+            <button class="clip-btn reset" id="schaleResetBtn">↺ 다시 쓰기</button>
+            <button class="clip-btn submit" id="schaleSubmitBtn" disabled>결재 승인 ✓</button>
           </div>
-          <button class="tap-btn" id="tapBtn">터치!</button>
-          <p class="tap-hint" id="tapHint">빠르게 반복해서 탭해주세요</p>
+          <p class="gadget-hint">서약서에 서명을 남긴 뒤 결재를 승인하세요</p>
         </div>
 
-        <p class="gesture-sub" id="gestureSub"></p>
+        <!-- 3) Fate/Grand Order: 3획 진홍빛 영주(令呪) 주입 UI -->
+        <div class="gadget-box gadget-summon" id="gadgetSummon" hidden>
+          <div class="command-seal-plate">
+            <svg class="seal-svg" viewBox="0 0 160 160">
+              <circle class="seal-magic-circle" cx="80" cy="80" r="72"/>
+              <!-- 영주 3획 -->
+              <path class="seal-stroke" id="sealStroke1" d="M80,25 C92,40 96,55 80,70 C64,55 68,40 80,25 Z"/>
+              <path class="seal-stroke" id="sealStroke2" d="M68,60 C48,70 44,95 64,105 C74,95 78,75 68,60 Z"/>
+              <path class="seal-stroke" id="sealStroke3" d="M92,60 C112,70 116,95 96,105 C86,95 82,75 92,60 Z"/>
+            </svg>
+            <div class="seal-center-core" id="sealCenterCore">✦</div>
+          </div>
+          <button class="seal-ignite-btn" id="sealIgniteBtn">
+            <span class="seal-btn-text">영주(令呪) 마력 주입 (0/3)</span>
+          </button>
+          <p class="gadget-hint">버튼을 탭하여 영주 3획에 마력을 차례로 점등하세요</p>
+        </div>
+
+        <!-- 4) 우마무스메: 스타팅 게이트 런치 레버 UI -->
+        <div class="gadget-box gadget-race" id="gadgetRace" hidden>
+          <div class="gate-board">
+            <div class="gate-lights">
+              <span class="g-light red active" id="gLight1"></span>
+              <span class="g-light yellow" id="gLight2"></span>
+              <span class="g-light green" id="gLight3"></span>
+            </div>
+            <div class="turf-gauge-track">
+              <div class="turf-gauge-fill" id="turfGaugeFill"></div>
+              <span class="turf-gauge-text" id="turfGaugeText">READY...</span>
+            </div>
+            <button class="gate-launch-btn" id="gateLaunchBtn">
+              <span class="gate-btn-icon">🏁</span>
+              <span class="gate-btn-sub">START 꾹 누르기</span>
+            </button>
+          </div>
+          <p class="gadget-hint">버튼을 꾹 눌러 신호가 녹색이 될 때까지 출발 파워를 모으세요</p>
+        </div>
+
+        <!-- 5) 니케: 승리의 여신: 사이버 전술 락온 & 버스트 방아쇠 UI -->
+        <div class="gadget-box gadget-tactics" id="gadgetTactics" hidden>
+          <div class="tactics-hud-screen">
+            <div class="hud-grid"></div>
+            <div class="hud-reticle" id="hudReticle">
+              <div class="reticle-ring"></div>
+              <div class="reticle-dot"></div>
+              <span class="hud-target-text" id="hudTargetText">LOCK-ON</span>
+            </div>
+            <div class="hud-burst-bar"><div class="burst-bar-fill" id="burstBarFill"></div></div>
+          </div>
+          <button class="burst-trigger-btn" id="burstTriggerBtn">
+            <span class="trigger-label">BURST CHARGE (꾹 누르기)</span>
+          </button>
+          <p class="gadget-hint">버튼을 꾹 눌러 버스트 게이지를 100% 충전하세요</p>
+        </div>
+
+        <!-- 6) 명일방주: 오리지늄 크리스탈 주파수 공명 다이얼 UI -->
+        <div class="gadget-box gadget-research" id="gadgetResearch" hidden>
+          <div class="research-scope">
+            <div class="crystal-prism" id="crystalPrism">◆</div>
+            <div class="wave-visualizer">
+              <div class="wave-line" id="waveLine"></div>
+              <span class="resonance-freq" id="resonanceFreq">0.0 % RESONANCE</span>
+            </div>
+          </div>
+          <div class="rhodes-dial-container" id="rhodesDialContainer">
+            <div class="rhodes-dial-body" id="rhodesDialBody">
+              <div class="dial-pointer"></div>
+            </div>
+          </div>
+          <p class="gadget-hint">다이얼을 시계방향으로 1바퀴 돌려 공명 주파수를 100% 맞추세요</p>
+        </div>
+
+        <!-- 7) 붕괴3rd: 하이페리온 초공간 워프 레버 UI -->
+        <div class="gadget-box gadget-voyage" id="gadgetVoyage" hidden>
+          <div class="hyperion-panel">
+            <div class="warp-speedometer">
+              <span class="warp-label">WARP OUTPUT</span>
+              <span class="warp-val" id="warpVal">0 %</span>
+            </div>
+            <div class="throttle-track" id="throttleTrack">
+              <div class="throttle-fill" id="throttleFill"></div>
+              <div class="throttle-handle" id="throttleHandle">▲<br><span>PUSH</span></div>
+            </div>
+          </div>
+          <p class="gadget-hint">워프 레버를 위로 끝까지 밀어올려 초공간 도약하세요</p>
+        </div>
+
+        <!-- 8) 붕괴: 스타레일: 은하열차 황금 승차권 티켓 펀칭기 UI -->
+        <div class="gadget-box gadget-explore" id="gadgetExplore" hidden>
+          <div class="train-ticket">
+            <div class="ticket-header">ASTRAL EXPRESS · PASS</div>
+            <div class="ticket-body">
+              <div class="ticket-dest">DESTINATION: DESTINY</div>
+              <div class="ticket-punch-hole" id="ticketPunchHole">★ PUNCH HERE</div>
+            </div>
+          </div>
+          <button class="ticket-punch-btn" id="ticketPunchBtn">
+            <span>🎫 티켓 개찰 펀칭!</span>
+          </button>
+          <p class="gadget-hint">펀칭 버튼을 탭하여 승차권에 별 모양 개찰을 완료하세요</p>
+        </div>
       </div>
 
       <!-- 3단계: 3D 양면 카드 플립 & 리빌 -->
@@ -215,6 +306,6 @@
     window.THEME_MAP = {{ theme_map | tojson }};
     window.TODAY_RESULT = {{ today_result_json | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='script.js') }}?v=20260826_30"></script>
+  <script src="{{ url_for('static', filename='script.js') }}?v=20260827_01"></script>
 </body>
 </html>

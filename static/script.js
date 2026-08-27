@@ -6,27 +6,30 @@
   const TODAY_RESULT = window.TODAY_RESULT || null;
 
   // ============================================================
-  // 테마별 설정 & 고유 비주얼 설정
+  // 게임 테마별 전용 가젯 & 비주얼 설정
   // ============================================================
   const THEME_CONFIG = {
-    // A) 서명형
-    school:   { gestureType: 'sign',  label: '서약서에 직접 서명해\n오늘의 방과후를 확정하세요',  artKey: 'sense',   fallback: '🖋️', themeClass: 'theme-school' },
-    summon:   { gestureType: 'sign',  label: '계약서에 마력으로 서명해\n인연을 확정하세요',         artKey: 'master',  fallback: '✒️', themeClass: 'theme-summon' },
-    // B) 꾹 누르기형
-    race:     { gestureType: 'hold',  label: '출발 버튼을 꾹 누르고 있어요\n신호가 울릴 때까지!',    artKey: 'trainer', fallback: '🏁', themeClass: 'theme-race' },
-    tactics:  { gestureType: 'hold',  label: '작전 승인 버튼을 꾹 누르고 있어요\n게이지가 꽉 차면 확정!', artKey: 'nikke', fallback: '🔐', themeClass: 'theme-tactics' },
-    // C) 돌리기형
-    voyage:   { gestureType: 'dial',  label: '타륜을 시계방향으로 돌려\n항로를 확정하세요',          artKey: 'captain', fallback: '🧭', themeClass: 'theme-voyage' },
-    research: { gestureType: 'dial',  label: '오리지늄 크리스탈을 돌려\n오늘의 분석을 완료하세요',    artKey: 'doctor',  fallback: '🔬', themeClass: 'theme-research' },
-    // D) 연타형
-    arsenal:  { gestureType: 'tap',   label: '탄창을 빠르게 탭해서\n장전을 완료하세요',              artKey: 'gf',      fallback: '🔫', themeClass: 'theme-arsenal' },
-    explore:  { gestureType: 'tap',   label: '개찰구를 빠르게 탭해서\n탑승을 완료하세요',             artKey: 'trailbz', fallback: '🎫', themeClass: 'theme-explore' },
+    // 1) 소녀전선 (지휘관) - 5발 탄창 삽탄 장전
+    arsenal:  { gadgetId: 'gadgetArsenal',  tag: 'ARSENAL · RELOAD',    title: '탄창에 5.56mm 탄환을 가득 장전하세요',       artKey: 'gf',      fallback: '🔫', themeClass: 'theme-arsenal' },
+    // 2) 블루 아카이브 (센세) - 샬레 공식 결재 서약서
+    school:   { gadgetId: 'gadgetSchool',   tag: 'SCHALE · APPROVAL',   title: '당번 학생 서약서에 서명 후 결재를 승인하세요', artKey: 'sense',   fallback: '🖋️', themeClass: 'theme-school' },
+    // 3) Fate/Grand Order (마스터) - 3획 진홍빛 영주 주입
+    summon:   { gadgetId: 'gadgetSummon',   tag: 'COMMAND SPELL · RITUAL', title: '영주(令呪) 3획에 진홍의 마력을 주입하세요',      artKey: 'master',  fallback: '✒️', themeClass: 'theme-summon' },
+    // 4) 우마무스메 (트레이너) - 스타팅 게이트 런치
+    race:     { gadgetId: 'gadgetRace',     tag: 'TURF · GATE LAUNCH',  title: '출발 버튼을 꾹 눌러 게이트 오픈 파워를 모으세요', artKey: 'trainer', fallback: '🏁', themeClass: 'theme-race' },
+    // 5) 니케 (지휘관) - 전술 HUD 락온 & 버스트 차지
+    tactics:  { gadgetId: 'gadgetTactics',  tag: 'TACTICAL · BURST',    title: '버스트 방아쇠를 꾹 당겨 전술 화력을 승인하세요',  artKey: 'nikke',    fallback: '🔐', themeClass: 'theme-tactics' },
+    // 6) 명일방주 (박사) - 오리지늄 크리스탈 공명 조율
+    research: { gadgetId: 'gadgetResearch', tag: 'RHODES · RESONANCE',  title: '다이얼을 돌려 오리지늄 공명 주파수를 맞추세요',   artKey: 'doctor',   fallback: '🔬', themeClass: 'theme-research' },
+    // 7) 붕괴3rd (함장) - 하이페리온 초공간 워프 스로틀
+    voyage:   { gadgetId: 'gadgetVoyage',   tag: 'HYPERION · WARP',     title: '워프 스로틀 레버를 밀어올려 도약 출력을 높이세요', artKey: 'captain', fallback: '🧭', themeClass: 'theme-voyage' },
+    // 8) 붕괴: 스타레일 (개척자) - 은하열차 황금 승차권 펀칭
+    explore:  { gadgetId: 'gadgetExplore',  tag: 'EXPRESS · PUNCH',     title: '은하열차 승차권에 개찰 펀칭을 완료하세요',       artKey: 'trailbz',  fallback: '🎫', themeClass: 'theme-explore' },
   };
 
   // ============================================================
   // DOM 요소
   // ============================================================
-  // 메인 페이지 요소
   const orbWrap        = document.getElementById('orbWrap');
   const mainCardWrap   = document.getElementById('mainCardWrap');
   const mainDisplayCard= document.getElementById('mainDisplayCard');
@@ -43,49 +46,29 @@
   const pityText     = document.getElementById('pityText');
   const historyStrip = document.getElementById('historyStrip');
 
-  // 모달 요소
   const modalOverlay = document.getElementById('modalOverlay');
   const modalClose   = document.getElementById('modalClose');
   const stageLoading = document.getElementById('stageLoading');
   const stageGesture = document.getElementById('stageGesture');
   const stageResult  = document.getElementById('stageResult');
 
-  // 테마 Ambient VFX
   const themeAmbientFx = document.getElementById('themeAmbientFx');
   const ambientBurst   = document.getElementById('ambientBurst');
 
-  // 제스처 공통
-  const gestureArtFrame    = document.getElementById('gestureArtFrame');
-  const gestureArtImg      = document.getElementById('gestureArtImg');
-  const gestureArtFallback = document.getElementById('gestureArtFallback');
-  const gestureLabel       = document.getElementById('gestureLabel');
-  const gestureSub         = document.getElementById('gestureSub');
+  const gadgetTag    = document.getElementById('gadgetTag');
+  const gadgetTitle  = document.getElementById('gadgetTitle');
 
-  // A) 서명형
-  const gestureSignWrap  = document.getElementById('gestureSignWrap');
-  const gestureCanvas    = document.getElementById('gestureCanvas');
-  const signResetBtn     = document.getElementById('signResetBtn');
-  const signSubmitBtn    = document.getElementById('signSubmitBtn');
-
-  // B) 꾹 누르기형
-  const gestureHoldWrap  = document.getElementById('gestureHoldWrap');
-  const holdRingFill     = document.getElementById('holdRingFill');
-  const holdBtn          = document.getElementById('holdBtn');
-  const holdBtnIcon      = document.getElementById('holdBtnIcon');
-
-  // C) 돌리기형
-  const gestureDialWrap  = document.getElementById('gestureDialWrap');
-  const dialContainer    = document.getElementById('dialContainer');
-  const dialBody         = document.getElementById('dialBody');
-  const dialFill         = document.getElementById('dialFill');
-  const dialHandleDot    = document.getElementById('dialHandleDot');
-
-  // D) 연타형
-  const gestureTapWrap   = document.getElementById('gestureTapWrap');
-  const tapFill          = document.getElementById('tapFill');
-  const tapProgressLabel = document.getElementById('tapProgressLabel');
-  const tapBtn           = document.getElementById('tapBtn');
-  const tapHint          = document.getElementById('tapHint');
+  // 8개 가젯 박스
+  const gadgetBoxes = {
+    gadgetArsenal:  document.getElementById('gadgetArsenal'),
+    gadgetSchool:   document.getElementById('gadgetSchool'),
+    gadgetSummon:   document.getElementById('gadgetSummon'),
+    gadgetRace:     document.getElementById('gadgetRace'),
+    gadgetTactics:  document.getElementById('gadgetTactics'),
+    gadgetResearch: document.getElementById('gadgetResearch'),
+    gadgetVoyage:   document.getElementById('gadgetVoyage'),
+    gadgetExplore:  document.getElementById('gadgetExplore'),
+  };
 
   // 결과 카드 (3D 플립)
   const cardFlipper      = document.getElementById('cardFlipper');
@@ -105,24 +88,6 @@
   let isPulling   = false;
   let currentCleanup = null;
 
-  // SVG 그라디언트 삽입
-  (function injectSvgDefs() {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;';
-    svg.innerHTML = `
-      <defs>
-        <linearGradient id="holdGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#38bdf8"/>
-          <stop offset="100%" stop-color="#f43f5e"/>
-        </linearGradient>
-        <linearGradient id="dialGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#a855f7"/>
-          <stop offset="100%" stop-color="#38bdf8"/>
-        </linearGradient>
-      </defs>`;
-    document.body.prepend(svg);
-  })();
-
   // ============================================================
   // 이미지 로드 헬퍼
   // ============================================================
@@ -135,15 +100,17 @@
   }
 
   // ============================================================
-  // 단계 전환
+  // 단계 전환 & 가젯 단일 표시 (오버랩 방지)
   // ============================================================
   function showStage(stage) {
     [stageLoading, stageGesture, stageResult].forEach(s => (s.hidden = s !== stage));
   }
 
-  function showGestureWrap(which) {
-    [gestureSignWrap, gestureHoldWrap, gestureDialWrap, gestureTapWrap]
-      .forEach(el => { if (el) el.hidden = el !== which; });
+  function showSingleGadget(targetId) {
+    Object.keys(gadgetBoxes).forEach(key => {
+      const box = gadgetBoxes[key];
+      if (box) box.hidden = (key !== targetId);
+    });
   }
 
   function openModal() {
@@ -164,9 +131,6 @@
     }
   }
 
-  // ============================================================
-  // SSR 파티클 & 빛 폭발 이펙트
-  // ============================================================
   function spawnParticles() {
     if (REDUCED_MOTION) return;
     for (let i = 0; i < 28; i++) {
@@ -183,10 +147,9 @@
   }
 
   // ============================================================
-  // 3D 카드 플립 & 결과 공개 연출
+  // 3D 카드 플립 공개 연출
   // ============================================================
   function revealResult(data, cfg) {
-    // 1) 카드 앞면 내용 채우기
     modalCard.className = 'card-face card-front card tier-' + data.tier;
     mRarityBadge.textContent = data.tier;
     mTermText.textContent    = data.term;
@@ -196,18 +159,12 @@
     mLuckyNumber.textContent = data.num;
     loadArt(mCardArtWrap, mCardArt, mCardArtFallback, cfg.artKey, cfg.fallback);
 
-    // 2) 테마별 Ambient VFX 활성화
     themeAmbientFx.className = 'theme-ambient-fx active ' + (cfg.themeClass || 'theme-school');
-
-    // 3) 결과 스테이지 열기 (초기엔 카드 뒷면 보임)
     cardFlipper.classList.remove('flipped');
     showStage(stageResult);
 
-    // 4) 드라마틱한 3D 플립 애니메이션 시작
     setTimeout(() => {
       cardFlipper.classList.add('flipped');
-
-      // 뒤집히는 순간(400ms 후) 빛 폭발 및 파티클 발동
       setTimeout(() => {
         ambientBurst.classList.add('explode');
         if (data.tier === 'SSR' || data.tier === 'SR') {
@@ -218,332 +175,484 @@
   }
 
   // ============================================================
-  // 제스처 시작 (공통 진입점)
+  // 가젯 인터랙션 시작 (공통 진입점)
   // ============================================================
   function startGesture(data) {
     const theme = data.theme || THEME_MAP[data.entry_id] || 'school';
     const cfg   = THEME_CONFIG[theme] || THEME_CONFIG.school;
 
-    // 공통: 이미지 + 라벨
-    loadArt(gestureArtFrame, gestureArtImg, gestureArtFallback, cfg.artKey, cfg.fallback);
-    gestureLabel.textContent = cfg.label;
-    gestureSub.textContent   = '';
+    gadgetTag.textContent   = cfg.tag;
+    gadgetTitle.textContent = cfg.title;
 
-    // 완료 콜백
+    showSingleGadget(cfg.gadgetId);
+    showStage(stageGesture);
+
     const onComplete = () => {
       revealResult(data, cfg);
     };
 
-    // 타입별 제스처 실행
-    showStage(stageGesture);
-    if      (cfg.gestureType === 'sign') startSign(onComplete);
-    else if (cfg.gestureType === 'hold') startHold(onComplete);
-    else if (cfg.gestureType === 'dial') startDial(onComplete);
-    else if (cfg.gestureType === 'tap')  startTap(onComplete);
+    if      (cfg.gadgetId === 'gadgetArsenal')  runArsenal(onComplete);
+    else if (cfg.gadgetId === 'gadgetSchool')   runSchool(onComplete);
+    else if (cfg.gadgetId === 'gadgetSummon')   runSummon(onComplete);
+    else if (cfg.gadgetId === 'gadgetRace')     runRace(onComplete);
+    else if (cfg.gadgetId === 'gadgetTactics')  runTactics(onComplete);
+    else if (cfg.gadgetId === 'gadgetResearch') runResearch(onComplete);
+    else if (cfg.gadgetId === 'gadgetVoyage')   runVoyage(onComplete);
+    else if (cfg.gadgetId === 'gadgetExplore')  runExplore(onComplete);
   }
 
-  // ============================================================
-  // A) 서명형: 캔버스 서명
-  // ============================================================
-  function startSign(onComplete) {
-    showGestureWrap(gestureSignWrap);
-    gestureSub.textContent = '서명을 그은 뒤 제출 버튼을 눌러주세요';
+  // ------------------------------------------------------------
+  // 1) 소녀전선: 5발 탄창 삽탄 장전 (STANAG 5-Round Reload)
+  // ------------------------------------------------------------
+  function runArsenal(onComplete) {
+    const btn = document.getElementById('ammoLoadBtn');
+    const text = btn.querySelector('.ammo-text');
+    const rows = document.querySelectorAll('#magSlot .bullet-row');
+    let loaded = 0;
+    const MAX = 5;
 
-    const canvas = gestureCanvas;
+    rows.forEach(r => r.classList.remove('loaded'));
+    text.textContent = `탄환 삽탄 (${loaded}/${MAX})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (loaded < MAX) {
+        rows[loaded].classList.add('loaded');
+        loaded++;
+        text.textContent = (loaded < MAX) ? `탄환 삽탄 (${loaded}/${MAX})` : `장전 완료! (LOCKED & LOADED)`;
+        if (loaded === MAX) {
+          btn.style.background = 'linear-gradient(135deg, #22c55e, #4ade80)';
+          btn.style.color = '#052e16';
+          setTimeout(() => { cleanup(); onComplete(); }, 350);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 2) 블루 아카이브: 샬레 서약서 서명 & 승인 결재
+  // ------------------------------------------------------------
+  function runSchool(onComplete) {
+    const canvas = document.getElementById('schaleCanvas');
     const ctx    = canvas.getContext('2d');
-    const box    = canvas.parentElement;
+    const area   = canvas.parentElement;
+    const stamp  = document.getElementById('approvalStamp');
+    const rBtn   = document.getElementById('schaleResetBtn');
+    const sBtn   = document.getElementById('schaleSubmitBtn');
 
-    function resizeCanvas() {
-      const w = canvas.offsetWidth || 340;
+    stamp.classList.remove('stamped');
+    area.classList.remove('has-strokes');
+    sBtn.disabled = true;
+    sBtn.style.opacity = '0.4';
+
+    function resize() {
+      const w = canvas.offsetWidth || 320;
       const h = canvas.offsetHeight || 100;
       canvas.width  = w * (window.devicePixelRatio || 1);
       canvas.height = h * (window.devicePixelRatio || 1);
       ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
       ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth   = 3;
+      ctx.lineWidth   = 2.8;
       ctx.lineCap     = 'round';
       ctx.lineJoin    = 'round';
     }
-    resizeCanvas();
+    resize();
 
-    let drawing    = false;
-    let totalLen   = 0;
-    const THRESHOLD = 60;
-    let lastX = 0, lastY = 0;
+    let drawing = false;
+    let strokeLen = 0;
+    let lx = 0, ly = 0;
 
-    function getPos(e) {
-      const rect = canvas.getBoundingClientRect();
-      const src  = e.touches ? e.touches[0] : e;
-      return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+    function getP(e) {
+      const r = canvas.getBoundingClientRect();
+      const s = e.touches ? e.touches[0] : e;
+      return { x: s.clientX - r.left, y: s.clientY - r.top };
     }
-
-    function onDown(e) {
+    function down(e) {
       drawing = true;
-      const { x, y } = getPos(e);
-      lastX = x; lastY = y;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
+      const { x, y } = getP(e);
+      lx = x; ly = y;
+      ctx.beginPath(); ctx.moveTo(x, y);
       e.preventDefault();
     }
-    function onMove(e) {
+    function move(e) {
       if (!drawing) return;
-      const { x, y } = getPos(e);
-      ctx.lineTo(x, y);
-      ctx.stroke();
+      const { x, y } = getP(e);
+      ctx.lineTo(x, y); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(x, y);
-      totalLen += Math.hypot(x - lastX, y - lastY);
-      lastX = x; lastY = y;
-      if (totalLen > 0) box.classList.add('has-strokes');
-      if (totalLen >= THRESHOLD) {
-        signSubmitBtn.disabled = false;
-        signSubmitBtn.style.opacity = '1';
-        signSubmitBtn.style.pointerEvents = 'auto';
+      strokeLen += Math.hypot(x - lx, y - ly);
+      lx = x; ly = y;
+      if (strokeLen > 0) area.classList.add('has-strokes');
+      if (strokeLen >= 50) {
+        sBtn.disabled = false;
+        sBtn.style.opacity = '1';
       }
       e.preventDefault();
     }
-    function onUp() { drawing = false; ctx.beginPath(); }
+    function up() { drawing = false; ctx.beginPath(); }
 
-    canvas.addEventListener('pointerdown', onDown);
-    canvas.addEventListener('pointermove', onMove);
-    canvas.addEventListener('pointerup',   onUp);
-    canvas.addEventListener('pointercancel', onUp);
+    canvas.addEventListener('pointerdown', down);
+    canvas.addEventListener('pointermove', move);
+    canvas.addEventListener('pointerup',   up);
+    canvas.addEventListener('pointercancel', up);
 
-    function resetCanvas() {
+    function reset() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      totalLen = 0;
-      box.classList.remove('has-strokes');
-      signSubmitBtn.disabled = true;
-      signSubmitBtn.style.opacity = '0.4';
-      signSubmitBtn.style.pointerEvents = 'none';
+      strokeLen = 0;
+      area.classList.remove('has-strokes');
+      sBtn.disabled = true;
+      sBtn.style.opacity = '0.4';
+      stamp.classList.remove('stamped');
     }
 
-    signResetBtn.onclick  = resetCanvas;
-    signSubmitBtn.onclick = () => {
-      if (totalLen < THRESHOLD) return;
-      cleanup();
-      onComplete();
+    rBtn.onclick = reset;
+    sBtn.onclick = () => {
+      stamp.classList.add('stamped');
+      setTimeout(() => { cleanup(); onComplete(); }, 500);
     };
 
     function cleanup() {
-      canvas.removeEventListener('pointerdown', onDown);
-      canvas.removeEventListener('pointermove', onMove);
-      canvas.removeEventListener('pointerup',   onUp);
-      canvas.removeEventListener('pointercancel', onUp);
-      signResetBtn.onclick  = null;
-      signSubmitBtn.onclick = null;
-      resetCanvas();
+      canvas.removeEventListener('pointerdown', down);
+      canvas.removeEventListener('pointermove', move);
+      canvas.removeEventListener('pointerup',   up);
+      canvas.removeEventListener('pointercancel', up);
+      rBtn.onclick = null; sBtn.onclick = null;
+      reset();
     }
     currentCleanup = cleanup;
   }
 
-  // ============================================================
-  // B) 꾹 누르기형: 원형 게이지
-  // ============================================================
-  function startHold(onComplete) {
-    showGestureWrap(gestureHoldWrap);
-    gestureSub.textContent = '버튼을 꾹 누르고 있으면 게이지가 채워져요';
+  // ------------------------------------------------------------
+  // 3) Fate/Grand Order: 영주 3획 점등 (Command Seal 3-Stroke)
+  // ------------------------------------------------------------
+  function runSummon(onComplete) {
+    const btn = document.getElementById('sealIgniteBtn');
+    const text = btn.querySelector('.seal-btn-text');
+    const s1 = document.getElementById('sealStroke1');
+    const s2 = document.getElementById('sealStroke2');
+    const s3 = document.getElementById('sealStroke3');
+    const core = document.getElementById('sealCenterCore');
+    const strokes = [s1, s2, s3];
+    let step = 0;
 
-    const CIRCUMFERENCE = 2 * Math.PI * 58;
-    holdRingFill.style.strokeDashoffset = CIRCUMFERENCE;
+    strokes.forEach(s => s.classList.remove('active'));
+    core.classList.remove('ignited');
+    text.textContent = `영주(令呪) 마력 주입 (0/3)`;
 
-    let pct     = 0;
+    function onClick(e) {
+      e.preventDefault();
+      if (step < 3) {
+        strokes[step].classList.add('active');
+        step++;
+        text.textContent = (step < 3) ? `영주(令呪) 마력 주입 (${step}/3)` : `영주 해방! 서번트 소환!`;
+        if (step === 3) {
+          core.classList.add('ignited');
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 4) 우마무스메: 스타팅 게이트 런치 (Gate Start Power Charge)
+  // ------------------------------------------------------------
+  function runRace(onComplete) {
+    const btn = document.getElementById('gateLaunchBtn');
+    const fill = document.getElementById('turfGaugeFill');
+    const txt  = document.getElementById('turfGaugeText');
+    const l1 = document.getElementById('gLight1');
+    const l2 = document.getElementById('gLight2');
+    const l3 = document.getElementById('gLight3');
+
+    let pct = 0;
     let pressing = false;
-    let rafId   = null;
-    let done    = false;
+    let raf = null;
+    let done = false;
+
+    l1.className = 'g-light red active';
+    l2.className = 'g-light yellow';
+    l3.className = 'g-light green';
+    fill.style.width = '0%';
+    txt.textContent = 'READY...';
 
     function tick() {
       if (!pressing || done) return;
-      pct = Math.min(100, pct + 2.0);
-      holdRingFill.style.strokeDashoffset = CIRCUMFERENCE * (1 - pct / 100);
-      holdBtnIcon.textContent = Math.round(pct) + '%';
+      pct = Math.min(100, pct + 2.2);
+      fill.style.width = pct + '%';
+      if (pct >= 40) l2.className = 'g-light yellow active';
+      if (pct >= 85) {
+        l1.className = 'g-light red';
+        l2.className = 'g-light yellow';
+        l3.className = 'g-light green active';
+        txt.textContent = 'GATE OPEN! 🚀';
+      } else {
+        txt.textContent = Math.round(pct) + '%';
+      }
+
       if (pct >= 100) {
         done = true;
-        cleanup();
-        onComplete();
+        setTimeout(() => { cleanup(); onComplete(); }, 300);
         return;
       }
-      rafId = requestAnimationFrame(tick);
+      raf = requestAnimationFrame(tick);
     }
 
-    function onDown(e) {
+    function down(e) {
       if (done) return;
       pressing = true;
-      holdBtn.classList.add('pressing');
-      rafId = requestAnimationFrame(tick);
+      btn.classList.add('pressing');
+      raf = requestAnimationFrame(tick);
       e.preventDefault();
     }
-    function onUp() {
+    function up() {
       if (done) return;
       pressing = false;
-      holdBtn.classList.remove('pressing');
-      cancelAnimationFrame(rafId);
-      const drain = setInterval(() => {
-        if (pressing || done) { clearInterval(drain); return; }
-        pct = Math.max(0, pct - 4);
-        holdRingFill.style.strokeDashoffset = CIRCUMFERENCE * (1 - pct / 100);
-        holdBtnIcon.textContent = pct > 0 ? Math.round(pct) + '%' : '꾹';
-        if (pct <= 0) clearInterval(drain);
-      }, 30);
+      btn.classList.remove('pressing');
+      cancelAnimationFrame(raf);
+      pct = 0;
+      fill.style.width = '0%';
+      txt.textContent = 'READY...';
+      l1.className = 'g-light red active';
+      l2.className = 'g-light yellow';
+      l3.className = 'g-light green';
     }
 
-    holdBtn.addEventListener('pointerdown', onDown);
-    window.addEventListener('pointerup',    onUp);
-    window.addEventListener('pointercancel', onUp);
+    btn.addEventListener('pointerdown', down);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
 
     function cleanup() {
-      cancelAnimationFrame(rafId);
-      holdBtn.removeEventListener('pointerdown', onDown);
-      window.removeEventListener('pointerup',    onUp);
-      window.removeEventListener('pointercancel', onUp);
-      holdBtn.classList.remove('pressing');
-      holdRingFill.style.strokeDashoffset = CIRCUMFERENCE;
-      holdBtnIcon.textContent = '꾹';
-      pct = 0;
+      cancelAnimationFrame(raf);
+      btn.removeEventListener('pointerdown', down);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
     }
     currentCleanup = cleanup;
   }
 
-  // ============================================================
-  // C) 돌리기형: 다이얼 회전
-  // ============================================================
-  function startDial(onComplete) {
-    showGestureWrap(gestureDialWrap);
-    gestureSub.textContent = '손잡이를 시계방향으로 돌려주세요';
+  // ------------------------------------------------------------
+  // 5) 니케: 전술 HUD 락온 & 버스트 차지
+  // ------------------------------------------------------------
+  function runTactics(onComplete) {
+    const btn  = document.getElementById('burstTriggerBtn');
+    const fill = document.getElementById('burstBarFill');
+    const txt  = document.getElementById('hudTargetText');
 
-    const CIRCUMFERENCE = 2 * Math.PI * 68;
-    const NEED_DEG = 360;
-    dialFill.style.strokeDashoffset = CIRCUMFERENCE;
+    let pct = 0;
+    let pressing = false;
+    let raf = null;
+    let done = false;
 
-    let totalDeg = 0;
-    let lastAngle = null;
+    fill.style.width = '0%';
+    txt.textContent = 'LOCK-ON';
+
+    function tick() {
+      if (!pressing || done) return;
+      pct = Math.min(100, pct + 2.2);
+      fill.style.width = pct + '%';
+      txt.textContent = pct >= 100 ? 'BURST 100% READY!' : `CHARGING ${Math.round(pct)}%`;
+      if (pct >= 100) {
+        done = true;
+        setTimeout(() => { cleanup(); onComplete(); }, 300);
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    function down(e) {
+      if (done) return;
+      pressing = true;
+      btn.classList.add('pressing');
+      raf = requestAnimationFrame(tick);
+      e.preventDefault();
+    }
+    function up() {
+      if (done) return;
+      pressing = false;
+      btn.classList.remove('pressing');
+      cancelAnimationFrame(raf);
+      pct = 0;
+      fill.style.width = '0%';
+      txt.textContent = 'LOCK-ON';
+    }
+
+    btn.addEventListener('pointerdown', down);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+
+    function cleanup() {
+      cancelAnimationFrame(raf);
+      btn.removeEventListener('pointerdown', down);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 6) 명일방주: 오리지늄 공명 주파수 다이얼 (Resonance Dial)
+  // ------------------------------------------------------------
+  function runResearch(onComplete) {
+    const container = document.getElementById('rhodesDialContainer');
+    const body      = document.getElementById('rhodesDialBody');
+    const freqTxt   = document.getElementById('resonanceFreq');
+    const prism     = document.getElementById('crystalPrism');
+
+    let deg = 0;
+    let lastA = null;
+    let dragging = false;
+    let done = false;
+    const NEED = 360;
+
+    function getA(e) {
+      const r = container.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const s = e.touches ? e.touches[0] : e;
+      return Math.atan2(s.clientY - cy, s.clientX - cx) * 180 / Math.PI;
+    }
+
+    function down(e) {
+      if (done) return;
+      dragging = true;
+      lastA = getA(e);
+      try { container.setPointerCapture(e.pointerId); } catch (_) {}
+      e.preventDefault();
+    }
+    function move(e) {
+      if (!dragging || done) return;
+      const a = getA(e);
+      let d = a - lastA;
+      if (d > 180) d -= 360;
+      if (d < -180) d += 360;
+      deg = Math.max(0, deg + d);
+      lastA = a;
+      body.style.transform = `rotate(${deg % 360}deg)`;
+      const pct = Math.min(100, Math.round((deg / NEED) * 100));
+      freqTxt.textContent = `${pct}.0 % RESONANCE`;
+      prism.style.transform = `scale(${1 + pct / 300})`;
+
+      if (deg >= NEED && !done) {
+        done = true;
+        freqTxt.textContent = '100% RESONANCE MATCHED!';
+        prism.style.color = '#fff';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+      e.preventDefault();
+    }
+    function up() { dragging = false; }
+
+    container.addEventListener('pointerdown', down);
+    container.addEventListener('pointermove', move);
+    container.addEventListener('pointerup',   up);
+    container.addEventListener('pointercancel', up);
+
+    function cleanup() {
+      container.removeEventListener('pointerdown', down);
+      container.removeEventListener('pointermove', move);
+      container.removeEventListener('pointerup',   up);
+      container.removeEventListener('pointercancel', up);
+      body.style.transform = '';
+      freqTxt.textContent = '0.0 % RESONANCE';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 7) 붕괴3rd: 하이페리온 워프 스로틀 (Warp Throttle Lever)
+  // ------------------------------------------------------------
+  function runVoyage(onComplete) {
+    const track  = document.getElementById('throttleTrack');
+    const handle = document.getElementById('throttleHandle');
+    const fill   = document.getElementById('throttleFill');
+    const val    = document.getElementById('warpVal');
+
     let dragging = false;
     let done = false;
 
-    function getAngle(e, el) {
-      const rect   = el.getBoundingClientRect();
-      const cx     = rect.left + rect.width  / 2;
-      const cy     = rect.top  + rect.height / 2;
-      const src    = e.touches ? e.touches[0] : e;
-      return Math.atan2(src.clientY - cy, src.clientX - cx) * 180 / Math.PI;
-    }
-
-    function setDeg(deg) {
-      dialHandleDot.style.transform = `rotate(${deg}deg) translateX(0) translateY(-36px)`;
-      dialBody.style.transform = `rotate(${deg}deg)`;
-      const pct = Math.min(100, (totalDeg / NEED_DEG) * 100);
-      dialFill.style.strokeDashoffset = CIRCUMFERENCE * (1 - pct / 100);
-    }
-
-    function onDown(e) {
-      if (done) return;
-      dragging   = true;
-      lastAngle  = getAngle(e, dialBody);
-      try { dialBody.setPointerCapture(e.pointerId); } catch (_) {}
-      e.preventDefault();
-    }
-    function onMove(e) {
-      if (!dragging || done) return;
-      const a = getAngle(e, dialBody);
-      let delta = a - lastAngle;
-      if (delta >  180) delta -= 360;
-      if (delta < -180) delta += 360;
-      totalDeg = Math.max(0, totalDeg + delta);
-      lastAngle = a;
-      setDeg(totalDeg % 360);
-      if (totalDeg >= NEED_DEG && !done) {
+    function setP(pct) {
+      pct = Math.max(0, Math.min(100, pct));
+      fill.style.height = pct + '%';
+      handle.style.bottom = 4 + (pct / 100) * (track.clientHeight - 60) + 'px';
+      val.textContent = Math.round(pct) + ' %';
+      if (pct >= 90 && !done) {
         done = true;
-        setDeg(360);
-        dialFill.style.strokeDashoffset = 0;
+        val.textContent = 'WARP SPEED 100%!';
         setTimeout(() => { cleanup(); onComplete(); }, 300);
       }
+    }
+
+    function down(e) {
+      if (done) return;
+      dragging = true;
+      try { track.setPointerCapture(e.pointerId); } catch (_) {}
+      move(e);
       e.preventDefault();
     }
-    function onUp() { dragging = false; }
+    function move(e) {
+      if (!dragging || done) return;
+      const r = track.getBoundingClientRect();
+      const s = e.touches ? e.touches[0] : e;
+      const rel = r.bottom - s.clientY - 30;
+      setP((rel / (r.height - 60)) * 100);
+    }
+    function up() {
+      if (done) return;
+      dragging = false;
+      setP(0);
+    }
 
-    dialBody.addEventListener('pointerdown', onDown);
-    dialBody.addEventListener('pointermove', onMove);
-    dialBody.addEventListener('pointerup',   onUp);
-    dialBody.addEventListener('pointercancel', onUp);
-    dialContainer.addEventListener('pointerdown', onDown);
-    dialContainer.addEventListener('pointermove', onMove);
+    track.addEventListener('pointerdown', down);
+    track.addEventListener('pointermove', move);
+    track.addEventListener('pointerup',   up);
+    track.addEventListener('pointercancel', up);
 
     function cleanup() {
-      dialBody.removeEventListener('pointerdown', onDown);
-      dialBody.removeEventListener('pointermove', onMove);
-      dialBody.removeEventListener('pointerup',   onUp);
-      dialBody.removeEventListener('pointercancel', onUp);
-      dialContainer.removeEventListener('pointerdown', onDown);
-      dialContainer.removeEventListener('pointermove', onMove);
-      dialFill.style.strokeDashoffset = CIRCUMFERENCE;
-      dialBody.style.transform = '';
-      totalDeg = 0; lastAngle = null;
+      track.removeEventListener('pointerdown', down);
+      track.removeEventListener('pointermove', move);
+      track.removeEventListener('pointerup',   up);
+      track.removeEventListener('pointercancel', up);
     }
     currentCleanup = cleanup;
   }
 
-  // ============================================================
-  // D) 연타형: 빠르게 탭해서 채우기
-  // ============================================================
-  function startTap(onComplete) {
-    showGestureWrap(gestureTapWrap);
-    gestureSub.textContent = '버튼을 빠르게 여러 번 탭해주세요!';
+  // ------------------------------------------------------------
+  // 8) 붕괴: 스타레일: 은하열차 황금 승차권 펀칭 (Express Ticket Punch)
+  // ------------------------------------------------------------
+  function runExplore(onComplete) {
+    const btn  = document.getElementById('ticketPunchBtn');
+    const hole = document.getElementById('ticketPunchHole');
 
-    const NEED_TAPS = 12;
-    let count = 0;
-    let done  = false;
-    let decayTimer = null;
+    hole.classList.remove('punched');
+    hole.textContent = '★ PUNCH HERE';
 
-    tapFill.style.width = '0%';
-    tapProgressLabel.textContent = '0%';
-    tapHint.textContent = `0 / ${NEED_TAPS}`;
-
-    function setPct(pct) {
-      pct = Math.max(0, Math.min(100, pct));
-      tapFill.style.width = pct + '%';
-      tapProgressLabel.textContent = Math.round(pct) + '%';
-    }
-
-    function resetDecay() {
-      clearInterval(decayTimer);
-      decayTimer = setInterval(() => {
-        if (done) { clearInterval(decayTimer); return; }
-        const cur = parseFloat(tapFill.style.width) || 0;
-        if (cur > 0) {
-          setPct(cur - 1.8);
-        } else {
-          clearInterval(decayTimer);
-        }
-      }, 60);
-    }
-
-    function onTap(e) {
-      if (done) return;
+    function onClick(e) {
       e.preventDefault();
-      count++;
-      tapHint.textContent = `${count} / ${NEED_TAPS}`;
-      const pct = (count / NEED_TAPS) * 100;
-      setPct(pct);
-      clearInterval(decayTimer);
-      setTimeout(resetDecay, 600);
-
-      if (count >= NEED_TAPS) {
-        done = true;
-        setPct(100);
-        cleanup();
-        setTimeout(onComplete, 300);
-      }
+      hole.classList.add('punched');
+      hole.textContent = '★ PUNCHED ✓';
+      btn.style.background = 'linear-gradient(135deg, #22c55e, #4ade80)';
+      btn.textContent = '승차권 개찰 완료!';
+      setTimeout(() => { cleanup(); onComplete(); }, 400);
     }
 
-    tapBtn.addEventListener('pointerdown', onTap);
-    tapBtn.addEventListener('touchstart',  onTap, { passive: false });
-
+    btn.addEventListener('click', onClick);
     function cleanup() {
-      clearInterval(decayTimer);
-      tapBtn.removeEventListener('pointerdown', onTap);
-      tapBtn.removeEventListener('touchstart',  onTap);
-      count = 0;
-      setPct(0);
-      tapHint.textContent = `0 / ${NEED_TAPS}`;
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎫 티켓 개찰 펀칭!';
     }
     currentCleanup = cleanup;
   }
@@ -563,7 +672,6 @@
   }
 
   function applyToMainPage(data) {
-    // 1) 소환 구체 영역 숨기고, 메인 결과 카드 영역 표시
     if (orbWrap) orbWrap.hidden = true;
     if (mainCardWrap) {
       mainCardWrap.hidden = false;
