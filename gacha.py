@@ -6,22 +6,25 @@
 import hashlib
 import random
 
-PITY_LIMIT = 10  # 이 횟수 안에 SSR이 없으면 다음 소환은 SSR 확정
+PITY_LIMIT = 10  # 이 횟수 안에 SSR/UR이 없으면 다음 소환은 SSR/UR 확정
 
 ENTRIES = [
-    {"id": "sense",   "term": "센세",    "game": "블루 아카이브",         "tier": "SSR", "weight": 3,  "theme": "school"},
-    {"id": "trainer", "term": "트레이너", "game": "우마무스메 프리티 더비", "tier": "SSR", "weight": 3,  "theme": "race"},
-    {"id": "nikke",   "term": "지휘관",  "game": "니케: 승리의 여신",      "tier": "SR",  "weight": 6,  "theme": "tactics"},
-    {"id": "doctor",  "term": "박사",    "game": "명일방주",              "tier": "SR",  "weight": 6,  "theme": "research"},
-    {"id": "captain", "term": "함장",    "game": "붕괴3rd",               "tier": "SR",  "weight": 6,  "theme": "voyage"},
-    {"id": "master",  "term": "마스터",  "game": "Fate/Grand Order",     "tier": "SR",  "weight": 6,  "theme": "summon"},
-    {"id": "gf",      "term": "지휘관",  "game": "소녀전선",              "tier": "R",   "weight": 35, "theme": "arsenal"},
-    {"id": "trailbz", "term": "개척자",  "game": "붕괴: 스타레일",        "tier": "R",   "weight": 35, "theme": "explore"},
+    {"id": "sense",    "term": "센세",     "game": "블루 아카이브",         "tier": "UR",  "weight": 1.0, "theme": "school"},
+    {"id": "traveler", "term": "여행자",   "game": "원신",                 "tier": "SSR", "weight": 2.5, "theme": "element"},
+    {"id": "trainer",  "term": "트레이너", "game": "우마무스메 프리티 더비", "tier": "SSR", "weight": 2.5, "theme": "race"},
+    {"id": "nikke",    "term": "지휘관",   "game": "니케: 승리의 여신",      "tier": "SR",  "weight": 6.0, "theme": "tactics"},
+    {"id": "doctor",   "term": "박사",     "game": "명일방주",              "tier": "SR",  "weight": 6.0, "theme": "research"},
+    {"id": "captain",  "term": "함장",     "game": "붕괴3rd",               "tier": "SR",  "weight": 6.0, "theme": "voyage"},
+    {"id": "master",   "term": "마스터",   "game": "Fate/Grand Order",     "tier": "SR",  "weight": 6.0, "theme": "summon"},
+    {"id": "gf",       "term": "지휘관",   "game": "소녀전선",              "tier": "R",   "weight": 23.0, "theme": "arsenal"},
+    {"id": "trailbz",  "term": "개척자",   "game": "붕괴: 스타레일",        "tier": "R",   "weight": 23.0, "theme": "explore"},
+    {"id": "producer", "term": "프로듀서", "game": "아이돌마스터",          "tier": "R",   "weight": 24.0, "theme": "idol"},
 ]
 ENTRIES_BY_ID = {e["id"]: e for e in ENTRIES}
 
 THEME_ITEMS = {
     "school":   ["샤프 한 자루", "따뜻한 코코아", "손수건", "필기 노트"],
+    "element":  ["바람개비", "달콤달콤 닭고기 스튜", "일곱신상의 깃털", "반짝이는 원석"],
     "race":     ["편한 운동화", "물통", "스톱워치", "발목 보호대"],
     "tactics":  ["접이식 지도", "통신기", "따뜻한 커피", "작전 수첩"],
     "research": ["돋보기", "실험용 장갑", "메모지", "오래된 도감"],
@@ -29,14 +32,21 @@ THEME_ITEMS = {
     "summon":   ["오래된 열쇠", "작은 촛불", "낡은 계약서", "은반지"],
     "arsenal":  ["윤활유 한 병", "드라이버 세트", "작업 장갑", "예비 부품"],
     "explore":  ["보온병", "접이식 지도", "손전등", "비상식량"],
+    "idol":     ["콘서트 펜라이트", "스케줄 다이어리", "에너지 드링크", "무대용 수건"],
 }
 
 THEME_TEXT = {
     "school": [
-        "오늘은 방과후 자습 시간처럼 차분하게 흘러가는 하루예요. {item}을(를) 챙기면 곁에 있는 사람과의 신뢰가 깊어져요.",
-        "교무실 창가에 볕이 좋은 날이에요. {color} 계열 소지품이 오늘의 행운을 데려와요.",
-        "누군가 조용히 상담을 청해올 징조가 있어요. {num}시쯤 좋은 대화가 오갈 거예요.",
-        "쌓아온 노력이 성적표처럼 드러나는 하루. 작은 칭찬 한마디가 생각보다 큰 힘이 됩니다.",
+        "오늘은 샬레 교무실 창가에 눈부신 빛이 쏟아지는 날이에요. {item}을(를) 챙기면 곁에 있는 학생들과의 신뢰가 깊어져요.",
+        "방과후 자습 시간처럼 평화롭고 따스한 하루. {color} 계열 소지품이 최상의 행운을 데려옵니다.",
+        "누군가 조용히 당신에게 기대를 품고 다가오는 날. {num}시쯤 좋은 대화가 오갈 거예요.",
+        "믿고 이끌어주는 당신의 다정함이 빛을 발하는 하루입니다.",
+    ],
+    "element": [
+        "티바트 대륙의 자유로운 바람이 당신의 앞길을 인도하는 날이에요. {item}이(가) 여정에 큰 힘이 돼요.",
+        "일곱신상에 바치는 공물처럼 값진 결실이 맺히는 하루. {color} 색상이 원소의 축복을 불러옵니다.",
+        "{num}번째 발걸음에서 뜻밖의 숨겨진 보물 상자를 발견할 예감이에요.",
+        "페이몬과 함께하는 모험처럼 웃음이 끊이지 않는 순조로운 하루입니다.",
     ],
     "race": [
         "출발선에 선 것처럼 두근거리는 하루예요. {item}을(를) 곁에 두면 막판 스퍼트에 힘이 실려요.",
@@ -80,9 +90,15 @@ THEME_TEXT = {
         "{num}번째 갈림길에서 뜻밖의 동행을 만날 수 있어요.",
         "지도에 없는 길이 오히려 지름길일 수 있어요.",
     ],
+    "idol": [
+        "오늘의 스테이지는 만원 관객의 함성으로 빛날 예감이에요. {item}을(를) 챙기면 담당 아이돌과의 유대가 깊어져요.",
+        "무대 위 스포트라이트가 당신을 정면으로 비추는 날. {color} 펜라이트 색상이 최고의 행운을 줍니다.",
+        "{num}번째 세트리스트 곡에서 관객 모두가 하나 되는 기적이 일어납니다.",
+        "당신의 프로듀스가 모두를 최고의 탑 아이돌로 이끄는 하루입니다.",
+    ],
 }
 
-COLORS = ["하늘색", "자수정색", "금빛", "산호색", "은빛", "라벤더", "에메랄드", "샤벳오렌지"]
+COLORS = ["하늘색", "자수정색", "금빛", "산호색", "은빛", "라벤더", "에메랄드", "샤벳오렌지", "프리즘무지개"]
 
 
 def _seed_from(date_str: str, salt: str) -> int:
@@ -91,7 +107,7 @@ def _seed_from(date_str: str, salt: str) -> int:
 
 
 def _pick_entry(rng: random.Random, force_ssr: bool):
-    pool = [e for e in ENTRIES if e["tier"] == "SSR"] if force_ssr else ENTRIES
+    pool = [e for e in ENTRIES if e["tier"] in ("UR", "SSR")] if force_ssr else ENTRIES
     total = sum(e["weight"] for e in pool)
     roll = rng.random() * total
     for e in pool:
@@ -101,30 +117,33 @@ def _pick_entry(rng: random.Random, force_ssr: bool):
     return pool[-1]
 
 
-def _build_fortune(entry: dict, rng: random.Random) -> dict:
-    templates = THEME_TEXT[entry["theme"]]
-    items = THEME_ITEMS[entry["theme"]]
-    template = rng.choice(templates)
+def draw(date_str: str, salt: str, pity: int) -> dict:
+    seed = _seed_from(date_str, salt)
+    rng = random.Random(seed)
+
+    force_ssr = pity >= PITY_LIMIT - 1
+    entry = _pick_entry(rng, force_ssr)
+
+    theme = entry["theme"]
+    items = THEME_ITEMS.get(theme, ["부적"])
     item = rng.choice(items)
     color = rng.choice(COLORS)
     num = rng.randint(1, 9)
-    text = template.format(item=item, color=color, num=num)
-    return {"text": text, "color": color, "num": num}
 
+    texts = THEME_TEXT.get(theme, ["오늘 하루도 좋은 일이 가득할 거예요."])
+    raw_text = rng.choice(texts)
+    text = raw_text.format(item=item, color=color, num=num)
 
-def draw(date_str: str, salt: str, pity: int) -> dict:
-    """오늘의 결과를 결정론적으로 계산 (같은 date+salt면 항상 같은 결과)."""
-    rng = random.Random(_seed_from(date_str, salt))
-    force_ssr = pity >= PITY_LIMIT - 1
-    entry = _pick_entry(rng, force_ssr)
-    fortune = _build_fortune(entry, rng)
+    next_pity = 0 if entry["tier"] in ("UR", "SSR") else pity + 1
+
     return {
         "entry_id": entry["id"],
         "term": entry["term"],
         "game": entry["game"],
         "tier": entry["tier"],
-        "theme": entry["theme"],
-        "text": fortune["text"],
-        "color": fortune["color"],
-        "num": fortune["num"],
+        "theme": theme,
+        "text": text,
+        "color": color,
+        "num": num,
+        "next_pity": next_pity,
     }

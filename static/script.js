@@ -5,8 +5,164 @@
   const THEME_MAP = window.THEME_MAP || {};
   const TODAY_RESULT = window.TODAY_RESULT || null;
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 게임 테마별 전용 가젯 & 비주얼 설정
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   const THEME_CONFIG = {
     // 1) 소녀전선 (지휘관) - 5발 탄창 삽탄 장전
@@ -25,10 +181,170 @@
     voyage:   { gadgetId: 'gadgetVoyage',   tag: 'HYPERION · WARP',     title: '워프 스로틀 레버를 밀어올려 도약 출력을 높이세요', artKey: 'captain', fallback: '🧭', themeClass: 'theme-voyage' },
     // 8) 붕괴: 스타레일 (개척자) - 은하열차 황금 승차권 펀칭
     explore:  { gadgetId: 'gadgetExplore',  tag: 'EXPRESS · PUNCH',     title: '은하열차 승차권에 개찰 펀칭을 완료하세요',       artKey: 'trailbz',  fallback: '🎫', themeClass: 'theme-explore' },
+    // 9) 원신 (여행자) - 7대 원소 공명 충전
+    element:  { gadgetId: 'gadgetElement',  tag: 'TEYVAT · RESONANCE',  title: '일곱신상의 7대 원소 공명을 활성화하세요',       artKey: 'traveler', fallback: '✨', themeClass: 'theme-element' },
+    // 10) 아이돌마스터 (프로듀서) - 라이브 펜라이트 응원
+    idol:     { gadgetId: 'gadgetIdol',     tag: '765PRO · LIVE STAGE', title: '펜라이트를 흔들어 라이브 무대 전압을 채우세요',    artKey: 'producer', fallback: '🎤', themeClass: 'theme-idol' },
   };
+
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
 
   // ============================================================
   // DOM 요소
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   const orbWrap        = document.getElementById('orbWrap');
   const mainCardWrap   = document.getElementById('mainCardWrap');
@@ -68,6 +384,8 @@
     gadgetResearch: document.getElementById('gadgetResearch'),
     gadgetVoyage:   document.getElementById('gadgetVoyage'),
     gadgetExplore:  document.getElementById('gadgetExplore'),
+    gadgetElement:  document.getElementById('gadgetElement'),
+    gadgetIdol:     document.getElementById('gadgetIdol'),
   };
 
   // 결과 카드 (3D 플립)
@@ -86,8 +404,164 @@
 
   let currentResult = TODAY_RESULT || null;
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 소환사 프로필 (닉네임 & 나이) 관리
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   const userNameInput  = document.getElementById('userNameInput');
   const userAgeInput   = document.getElementById('userAgeInput');
@@ -121,8 +595,164 @@
   let isPulling   = false;
   let currentCleanup = null;
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 이미지 로드 헬퍼
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   function loadArt(frameEl, imgEl, fallbackEl, artKey, fallbackIcon) {
     if (fallbackEl) fallbackEl.textContent = fallbackIcon || '✦';
@@ -132,8 +762,164 @@
     imgEl.src = '/static/images/' + (artKey || 'sense') + '.svg';
   }
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 단계 전환 & 가젯 단일 표시 (오버랩 방지)
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   function showStage(stage) {
     [stageLoading, stageGesture, stageResult].forEach(s => (s.hidden = s !== stage));
@@ -179,8 +965,164 @@
     }
   }
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 3D 카드 플립 공개 연출
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   function revealResult(data, cfg) {
     modalCard.className = 'card-face card-front card tier-' + data.tier;
@@ -207,15 +1149,171 @@
       cardFlipper.classList.add('flipped');
       setTimeout(() => {
         ambientBurst.classList.add('explode');
-        if (data.tier === 'SSR' || data.tier === 'SR') {
+        if (data.tier === 'UR' || data.tier === 'SSR' || data.tier === 'SR') {
           spawnParticles();
         }
       }, 450);
     }, 250);
   }
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 가젯 인터랙션 시작 (공통 진입점)
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   function startGesture(data) {
     const theme = data.theme || THEME_MAP[data.entry_id] || 'school';
@@ -239,6 +1337,8 @@
     else if (cfg.gadgetId === 'gadgetResearch') runResearch(onComplete);
     else if (cfg.gadgetId === 'gadgetVoyage')   runVoyage(onComplete);
     else if (cfg.gadgetId === 'gadgetExplore')  runExplore(onComplete);
+    else if (cfg.gadgetId === 'gadgetElement')  runElement(onComplete);
+    else if (cfg.gadgetId === 'gadgetIdol')     runIdol(onComplete);
   }
 
   // ------------------------------------------------------------
@@ -697,8 +1797,164 @@
     currentCleanup = cleanup;
   }
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 메인 페이지 UI 업데이트 (결과 카드 전시)
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   function prependHistoryChip(data) {
     const empty = historyStrip.querySelector('.empty-msg');
@@ -744,8 +2000,164 @@
     revealResult(data, cfg);
   }
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 소환 실행
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   async function doPull() {
     if (isPulling) return;
@@ -775,8 +2187,164 @@
     }
   }
 
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   // 이벤트 바인딩
+
+  // ------------------------------------------------------------
+  // 9) 원신: 티바트 7대 원소 공명 (Teyvat Elemental Resonance)
+  // ------------------------------------------------------------
+  function runElement(onComplete) {
+    const btn = document.getElementById('elementResonateBtn');
+    const badges = document.querySelectorAll('#gadgetElement .el-badge');
+    let step = 0;
+    const NEED = 3;
+
+    badges.forEach(b => b.classList.remove('active'));
+    btn.textContent = `✨ 원소 공명 충전 (0/${NEED})`;
+
+    function onClick(e) {
+      e.preventDefault();
+      if (step < NEED) {
+        // 2~3개씩 활성화
+        if (step === 0) { badges[0].classList.add('active'); badges[1].classList.add('active'); }
+        else if (step === 1) { badges[2].classList.add('active'); badges[3].classList.add('active'); badges[4].classList.add('active'); }
+        else { badges[5].classList.add('active'); badges[6].classList.add('active'); }
+        step++;
+        btn.textContent = (step < NEED) ? `✨ 원소 공명 충전 (${step}/${NEED})` : `원소 폭발! (ELEMENTAL BURST!)`;
+        if (step === NEED) {
+          btn.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
+          btn.style.color = '#1f1501';
+          setTimeout(() => { cleanup(); onComplete(); }, 400);
+        }
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+    currentCleanup = cleanup;
+  }
+
+  // ------------------------------------------------------------
+  // 10) 아이돌마스터: 라이브 펜라이트 응원 (Live Stage Cheer)
+  // ------------------------------------------------------------
+  function runIdol(onComplete) {
+    const btn   = document.getElementById('penlightCheerBtn');
+    const fill  = document.getElementById('voltageFill');
+    const label = document.getElementById('voltageLabel');
+    let count = 0;
+    const NEED = 10;
+    let done = false;
+
+    fill.style.width = '0%';
+    label.textContent = 'VOLTAGE 0%';
+
+    function onClick(e) {
+      if (done) return;
+      e.preventDefault();
+      count++;
+      const pct = Math.min(100, (count / NEED) * 100);
+      fill.style.width = pct + '%';
+      label.textContent = `VOLTAGE ${Math.round(pct)}%`;
+      if (count >= NEED) {
+        done = true;
+        label.textContent = 'PRODUCE SUCCESS! ⭐';
+        btn.style.background = 'linear-gradient(135deg, #fbbf24, #f43f5e)';
+        btn.textContent = '라이브 대성공!';
+        setTimeout(() => { cleanup(); onComplete(); }, 350);
+      }
+    }
+
+    btn.addEventListener('click', onClick);
+    function cleanup() {
+      btn.removeEventListener('click', onClick);
+      btn.style.background = '';
+      btn.textContent = '🎤 펜라이트 흔들기! (PRODUCE!)';
+    }
+    currentCleanup = cleanup;
+  }
+
   // ============================================================
   if (pullBtn && !pullBtn.disabled) pullBtn.addEventListener('click', doPull);
 
